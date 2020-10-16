@@ -1,0 +1,8 @@
+USE master
+GO
+
+CREATE DATABASE TourDB
+GO
+
+USE TourDB
+GO
