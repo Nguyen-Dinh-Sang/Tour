@@ -1,4 +1,4 @@
-USE master
+﻿USE master
 GO
 
 CREATE DATABASE TourDB
@@ -6,3 +6,173 @@ GO
 
 USE TourDB
 GO
+
+-- 1 Thể loại tour
+CREATE TABLE Tour_Loai(
+	Loai_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Loai_Ten NVARCHAR(100) NOT NULL,
+	Loai_MoTa NVARCHAR(1000) NOT NULL,
+	NgayTao DATE DEFAULT GETDATE()
+)
+
+-- 2 Địa điểm tour
+CREATE TABLE Tour_DiaDiem(
+	DiaDiem_ID INT IDENTITY(1,1) PRIMARY KEY,
+	DiaDiem_ThanhPho NVARCHAR(100) NOT NULL,
+	DiaDiem_Ten NVARCHAR(100) NOT NULL,
+	DiaDiem_MoTa NVARCHAR(1000) NOT NULL,
+	NgayTao DATE DEFAULT GETDATE()
+)
+
+-- 3 Giá tour
+CREATE TABLE Tour_Gia(
+	Gia_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Gia_SoTien DECIMAL(13,1) NOT NULL,
+	Tour_ID INT NOT NULL,
+	Gia_TuNgay DATE NOT NULL,
+	Gia_DenNgay DATE NOT NULL,
+	NgayTao DATE DEFAULT GETDATE()
+)
+
+-- 4 Tour
+CREATE TABLE Tour(
+	Tour_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Tour_Ten NVARCHAR(100) NOT NULL,
+	Tour_MoTa NVARCHAR(1000) NOT NULL,
+	Loai_ID INT NOT NULL,
+	Gia_ID INT NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+	CONSTRAINT Tour_Tour_Loai
+	FOREIGN KEY (Loai_ID)
+	REFERENCES Tour_Loai(Loai_ID)
+	ON DELETE CASCADE,
+	CONSTRAINT Tour_Tour_Gia
+	FOREIGN KEY (Gia_ID)
+	REFERENCES Tour_Gia(Gia_ID)
+	ON DELETE CASCADE
+)
+
+-- 5 Chi tiết tour
+CREATE TABLE Tour_ChiTiet(
+	ChiTiet_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Tour_ID INT NOT NULL,
+	DiaDiem_ID INT NOT NULL,
+	ChiTiet_ThuTu INT NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+	CONSTRAINT Tour_ChiTiet_Tour
+	FOREIGN KEY (Tour_ID)
+	REFERENCES Tour(Tour_ID)
+	ON DELETE CASCADE,
+	CONSTRAINT Tour_ChiTiet_Tour_DiaDiem
+	FOREIGN KEY (DiaDiem_ID)
+	REFERENCES Tour_DiaDiem(DiaDiem_ID)
+	ON DELETE CASCADE
+)
+
+-- 6 Đoàn đi tour
+CREATE TABLE Tour_Doan(
+	Doan_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Tour_ID INT NOT NULL,
+	Doan_Ten NVARCHAR(100) NOT NULL,
+	Doan_NgayDi DATE NOT NULL,
+	Doan_NgayVe DATE NOT NULL,
+	Doan_ChiTiet NVARCHAR(1000) NOT NULL,
+	Doan_GiaTour DECIMAL(13,1) NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+	CONSTRAINT Tour_Doan_Tour
+	FOREIGN KEY (Tour_ID)
+	REFERENCES Tour(Tour_ID)
+	ON DELETE CASCADE
+)
+
+-- 7 Nhân viên
+CREATE TABLE Tour_NhanVien(
+	NhanVien_ID INT IDENTITY(1,1) PRIMARY KEY,
+	NhanVien_Ten NVARCHAR(100) NOT NULL,
+	NhanVien_SoDienThoai NVARCHAR(12) NOT NULL,
+	NhanVien_Email NVARCHAR(100) NOT NULL,
+	NhanVien_NgaySinh DATE NOT NULL,
+	NgayTao DATE DEFAULT GETDATE()
+)
+
+-- 8 Khách hàng
+CREATE TABLE Tour_KhachHang(
+	KhachHang_ID INT IDENTITY(1,1) PRIMARY KEY,
+	KhachHang_Ten NVARCHAR(100) NOT NULL,
+	KhachHang_SoDienThoai NVARCHAR(12) NOT NULL,
+	KhachHang_Email NVARCHAR(100) NOT NULL,
+	KhachHang_NgaySinh DATE NOT NULL,
+	KhachHang_ChungMinhNhanDan DATE NOT NULL,
+	NgayTao DATE DEFAULT GETDATE()
+)
+
+-- 9 Khách hàng trong đoàn du lịch
+CREATE TABLE Doan_KhachHang(
+	Doan_KhachHang_ID INT IDENTITY(1,1) PRIMARY KEY,
+	KhachHang_ID INT NOT NULL,
+	Doan_ID INT NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+	CONSTRAINT Doan_KhachHang_Tour_KhachHang
+	FOREIGN KEY (KhachHang_ID)
+	REFERENCES Tour_KhachHang(KhachHang_ID)
+	ON DELETE CASCADE,
+	CONSTRAINT Doan_KhachHang_Tour_Doan
+	FOREIGN KEY (Doan_ID)
+	REFERENCES Tour_Doan(Doan_ID)
+	ON DELETE CASCADE
+)
+
+-- 10 Nhân viên phụ trách đoàn du lịch
+CREATE TABLE Doan_NhanVien(
+	Doan_NhanVien_ID INT IDENTITY(1,1) PRIMARY KEY,
+	NhanVien_ID INT NOT NULL,
+	Doan_ID INT NOT NULL,
+	NhanVien_NhiemVu NVARCHAR(100) NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+	CONSTRAINT Doan_NhanVien_Tour_NhanVien
+	FOREIGN KEY (NhanVien_ID)
+	REFERENCES Tour_NhanVien(NhanVien_ID)
+	ON DELETE CASCADE,
+	CONSTRAINT Doan_NhanVien_Tour_Doan
+	FOREIGN KEY (Doan_ID)
+	REFERENCES Tour_Doan(Doan_ID)
+	ON DELETE CASCADE
+)
+
+-- 11 Loại chi phí trong tour
+CREATE TABLE Tour_LoaiChiPhi(
+	LoaiChiPhi_ID INT IDENTITY(1,1) PRIMARY KEY,
+	LoaiChiPhi_Ten NVARCHAR(100) NOT NULL,
+	LoaiChiPhi_MoTa NVARCHAR(1000) NOT NULL,
+	LoaiChiPhi_SoTien DECIMAL(13,1) NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+)
+
+-- 12 Tổng chi phí của đoàn
+CREATE TABLE Tour_ChiPhi(
+	ChiPhi_ID INT IDENTITY(1,1) PRIMARY KEY,
+	Doan_ID INT NOT NULL,
+	ChiPhiTong DECIMAL(14,1) NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+	CONSTRAINT Tour_ChiPhi_Tour_Doan
+	FOREIGN KEY (Doan_ID)
+	REFERENCES Tour_Doan(Doan_ID)
+	ON DELETE CASCADE
+)
+
+-- 13 Chi tiết chi phí
+CREATE TABLE Tour_ChiPhi_ChiTiet(
+	ChiPhi_ChiTiet_ID INT IDENTITY(1,1) PRIMARY KEY,
+	ChiPhi_ID INT NOT NULL,
+	LoaiChiPhi_ID INT NOT NULL,
+	ChiPhiTong DECIMAL(13,1) NOT NULL,
+	NgayTao DATE DEFAULT GETDATE(),
+	CONSTRAINT Tour_ChiPhi_ChiTiet_Tour_ChiPhi
+	FOREIGN KEY (ChiPhi_ID)
+	REFERENCES Tour_ChiPhi(ChiPhi_ID)
+	ON DELETE CASCADE,
+	CONSTRAINT Tour_ChiPhi_ChiTiet_Tour_LoaiChiPhi
+	FOREIGN KEY (LoaiChiPhi_ID)
+	REFERENCES Tour_LoaiChiPhi(LoaiChiPhi_ID)
+	ON DELETE CASCADE,
+)
