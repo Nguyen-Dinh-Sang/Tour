@@ -161,6 +161,133 @@ INSERT INTO Tour_ChiTiet(Tour_ID, DiaDiem_ID, ChiTiet_ThuTu)
 VALUES(4, 23, 2)
 GO
 
+-- Đoàn đi tour
+INSERT INTO Tour_Doan(Tour_ID, Doan_Ten, Doan_NgayDi, Doan_NgayVe, Doan_ChiTiet, Doan_GiaTour)
+VALUES(1, N'Đoàn 1', '2020-10-30', '2020-11-10', N'Đoàn 1', 1000000)
+
+INSERT INTO Tour_Doan(Tour_ID, Doan_Ten, Doan_NgayDi, Doan_NgayVe, Doan_ChiTiet, Doan_GiaTour)
+VALUES(2, N'Đoàn 2', '2020-10-30', '2020-11-10', N'Đoàn 2', 1000000)
+
+INSERT INTO Tour_Doan(Tour_ID, Doan_Ten, Doan_NgayDi, Doan_NgayVe, Doan_ChiTiet, Doan_GiaTour)
+VALUES(3, N'Đoàn 3', '2020-10-30', '2020-11-10', N'Đoàn 3', 1000000)
+
+INSERT INTO Tour_Doan(Tour_ID, Doan_Ten, Doan_NgayDi, Doan_NgayVe, Doan_ChiTiet, Doan_GiaTour)
+VALUES(4, N'Đoàn 4', '2020-10-30', '2020-11-10', N'Đoàn 4', 1000000)
+GO
+
+-- Nhân viên
+INSERT INTO Tour_NhanVien(NhanVien_Ten, NhanVien_SoDienThoai, NhanVien_Email, NhanVien_NgaySinh)
+VALUES(N'Nguyễn Đình Sang', '0345225651', 'nguyendinhsang9199@gmail.com', '1999-01-09')
+
+INSERT INTO Tour_NhanVien(NhanVien_Ten, NhanVien_SoDienThoai, NhanVien_Email, NhanVien_NgaySinh)
+VALUES(N'Nguyễn Thị Xuân Linh', '0333748913', 'xuanlinh99.249199@gmail.com', '1999-10-24')
+
+INSERT INTO Tour_NhanVien(NhanVien_Ten, NhanVien_SoDienThoai, NhanVien_Email, NhanVien_NgaySinh)
+VALUES(N'Trần Thanh Phong', '0275138858', 'phongle11303@gmail.com', '2000-01-01')
+
+INSERT INTO Tour_NhanVien(NhanVien_Ten, NhanVien_SoDienThoai, NhanVien_Email, NhanVien_NgaySinh)
+VALUES(N'Phạm Phương Thanh', '0355773700', 'khachehoa@gmail.com', '1998-01-01')
+GO
+
+-- Khách hàng
+INSERT INTO Tour_KhachHang(KhachHang_Ten, KhachHang_SoDienThoai, KhachHang_Email, KhachHang_NgaySinh, KhachHang_ChungMinhNhanDan)
+VALUES(N'Phạm Phương Thanh', '0355773700', 'khachehoa@gmail.com', '1998-01-01', '123456789')
+
+INSERT INTO Tour_KhachHang(KhachHang_Ten, KhachHang_SoDienThoai, KhachHang_Email, KhachHang_NgaySinh, KhachHang_ChungMinhNhanDan)
+VALUES(N'Trần Thanh Phong', '0275138858', 'phongle11303@gmail.com', '2000-01-01', '987654321')
+
+INSERT INTO Tour_KhachHang(KhachHang_Ten, KhachHang_SoDienThoai, KhachHang_Email, KhachHang_NgaySinh, KhachHang_ChungMinhNhanDan)
+VALUES(N'Nguyễn Thị Xuân Linh', '0333748913', 'xuanlinh99.249199@gmail.com', '1999-10-24', '7531598462')
+
+INSERT INTO Tour_KhachHang(KhachHang_Ten, KhachHang_SoDienThoai, KhachHang_Email, KhachHang_NgaySinh, KhachHang_ChungMinhNhanDan)
+VALUES(N'Nguyễn Đình Sang', '0345225651', 'nguyendinhsang9199@gmail.com', '1999-01-09', '741852963')
+GO
+
+-- Khách hàng trong đoàn du lịch
+INSERT INTO Doan_KhachHang(KhachHang_ID, Doan_ID)
+VALUES(1, 1)
+
+INSERT INTO Doan_KhachHang(KhachHang_ID, Doan_ID)
+VALUES(2, 1)
+
+INSERT INTO Doan_KhachHang(KhachHang_ID, Doan_ID)
+VALUES(3, 1)
+
+INSERT INTO Doan_KhachHang(KhachHang_ID, Doan_ID)
+VALUES(1, 3)
+
+INSERT INTO Doan_KhachHang(KhachHang_ID, Doan_ID)
+VALUES(3, 3)
+
+INSERT INTO Doan_KhachHang(KhachHang_ID, Doan_ID)
+VALUES(4, 3)
+GO
+
+-- Nhân viên phụ trách
+INSERT INTO Doan_NhanVien(NhanVien_ID, Doan_ID, NhanVien_NhiemVu)
+VALUES(1, 1, N'Lái xe')
+
+INSERT INTO Doan_NhanVien(NhanVien_ID, Doan_ID, NhanVien_NhiemVu)
+VALUES(1, 2, N'Lái xe')
+
+INSERT INTO Doan_NhanVien(NhanVien_ID, Doan_ID, NhanVien_NhiemVu)
+VALUES(1, 3, N'Lái xe')
+
+INSERT INTO Doan_NhanVien(NhanVien_ID, Doan_ID, NhanVien_NhiemVu)
+VALUES(1, 4, N'Lái xe')
+GO
+
+-- Các loại chi phí
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
+VALUES(N'Xe', N'Chi phí phương tiện đi lại', 1000000)
+
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
+VALUES(N'Ăn', N'Chi phí ăn uống', 1000000)
+
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
+VALUES(N'Phòng', N'Chi phí nơi ở', 1000000)
+
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
+VALUES(N'Vé', N'Chi phí vào cổng các khu du lịch', 1000000)
+GO
+
+-- Tổng chi phí đoàn
+INSERT INTO Tour_ChiPhi(Doan_ID, ChiPhiTong)
+VALUES(1, 3000000)
+
+INSERT INTO Tour_ChiPhi(Doan_ID, ChiPhiTong)
+VALUES(3, 3000000)
+GO
+
+-- Chi tiết chi phí
+INSERT INTO Tour_ChiPhi_ChiTiet(ChiPhi_ID, LoaiChiPhi_ID, ChiPhi)
+VALUES(1, 1, 1000000)
+
+INSERT INTO Tour_ChiPhi_ChiTiet(ChiPhi_ID, LoaiChiPhi_ID, ChiPhi)
+VALUES(2, 1, 1000000)
+GO
+
+SELECT *
+FROM Tour_ChiPhi_ChiTiet
+
+SELECT *
+FROM Tour_ChiPhi
+
+SELECT *
+FROM Tour_LoaiChiPhi
+
+SELECT *
+FROM Doan_NhanVien
+
+SELECT *
+FROM Doan_KhachHang
+
+SELECT *
+FROM Tour_KhachHang
+
+SELECT *
+FROM Tour_NhanVien
+
 SELECT *
 FROM Tour
 
@@ -175,3 +302,6 @@ FROM Tour_Gia
 
 SELECT *
 FROM Tour_ChiTiet
+
+SELECT *
+FROM Tour_Doan

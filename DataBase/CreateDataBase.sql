@@ -102,7 +102,7 @@ CREATE TABLE Tour_KhachHang(
 	KhachHang_SoDienThoai NVARCHAR(12) NOT NULL,
 	KhachHang_Email NVARCHAR(100) NOT NULL,
 	KhachHang_NgaySinh DATE NOT NULL,
-	KhachHang_ChungMinhNhanDan DATE NOT NULL,
+	KhachHang_ChungMinhNhanDan VARCHAR(15) NOT NULL,
 	NgayTao DATE DEFAULT GETDATE()
 )
 
@@ -165,7 +165,7 @@ CREATE TABLE Tour_ChiPhi_ChiTiet(
 	ChiPhi_ChiTiet_ID INT IDENTITY(1,1) PRIMARY KEY,
 	ChiPhi_ID INT NOT NULL,
 	LoaiChiPhi_ID INT NOT NULL,
-	ChiPhiTong DECIMAL(13,1) NOT NULL,
+	ChiPhi DECIMAL(13,1) NOT NULL,
 	NgayTao DATE DEFAULT GETDATE(),
 	CONSTRAINT Tour_ChiPhi_ChiTiet_Tour_ChiPhi
 	FOREIGN KEY (ChiPhi_ID)
