@@ -92,6 +92,20 @@ INSERT INTO Tour_DiaDiem(DiaDiem_ThanhPho, DiaDiem_Ten, DiaDiem_MoTa)
 VALUES(N'Bà Rịa - Vũng Tàu', N'Thành phố biển Vũng Tàu', N'Địa hình đa dạng và sở hữu nhiều địa điểm đẹp')
 GO
 
+-- Tour
+INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID)
+VALUES(N'Tây Bắc', N'Du lịch các tỉnh vùng núi phía bắc Việt Nam', 1)
+
+INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID)
+VALUES(N'Biển Đảo', N'Tham quan các vùng biển, các hòn đảo từ bắc vào nam', 2)
+
+INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID)
+VALUES(N'Miền Trung', N'Khám phá các vịnh biển và hang động nổi tiếng', 3)
+
+INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID)
+VALUES(N'Miền Nam', N'Vòng quanh các tỉnh Đông Nam Bộ', 4)
+GO
+
 -- Giá tour
 INSERT INTO Tour_Gia(Gia_SoTien, Tour_ID, Gia_TuNgay, Gia_DenNgay)
 VALUES(1000000, 1, '2020-01-01', '2020-04-01')
@@ -106,18 +120,18 @@ INSERT INTO Tour_Gia(Gia_SoTien, Tour_ID, Gia_TuNgay, Gia_DenNgay)
 VALUES(1000000, 4, '2020-10-01', '2020-12-31')
 GO
 
--- Tour
-INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID, Gia_ID)
-VALUES(N'Tây Bắc', N'Du lịch các tỉnh vùng núi phía bắc Việt Nam', 1, 1)
+-- Giá tại một thời điểm
+INSERT INTO Gia_Tour_HienTai(Tour_ID, Gia_ID)
+VALUES(1,1)
 
-INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID, Gia_ID)
-VALUES(N'Biển Đảo', N'Tham quan các vùng biển, các hòn đảo từ bắc vào nam', 2, 2)
+INSERT INTO Gia_Tour_HienTai(Tour_ID, Gia_ID)
+VALUES(2,2)
 
-INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID, Gia_ID)
-VALUES(N'Miền Trung', N'Khám phá các vịnh biển và hang động nổi tiếng', 3, 3)
+INSERT INTO Gia_Tour_HienTai(Tour_ID, Gia_ID)
+VALUES(3,3)
 
-INSERT INTO Tour(Tour_Ten, Tour_MoTa, Loai_ID, Gia_ID)
-VALUES(N'Miền Nam', N'Vòng quanh các tỉnh Đông Nam Bộ', 4, 4)
+INSERT INTO Gia_Tour_HienTai(Tour_ID, Gia_ID)
+VALUES(4,4)
 GO
 
 -- Chi tiết tour
