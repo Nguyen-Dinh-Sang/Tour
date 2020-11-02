@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TourMVC.Models.TourDoan>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DoanTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoanNgayDi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoanNgayVe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoanChiTiet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoanGiaTour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayTao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tour)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoanTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoanNgayDi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoanNgayVe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoanChiTiet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoanGiaTour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayTao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tour.TourMoTa)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DoanId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DoanId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DoanId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

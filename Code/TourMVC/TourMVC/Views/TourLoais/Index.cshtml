@@ -1,0 +1,42 @@
+﻿@model IEnumerable<TourMVC.Models.TourLoai>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Danh Sách Loại Tour</h1>
+
+<p>
+    <a asp-action="Create">Thêm Loại Mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LoaiTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoaiMoTa)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiMoTa)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LoaiId">Chỉnh Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.LoaiId">Chi Tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.LoaiId">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

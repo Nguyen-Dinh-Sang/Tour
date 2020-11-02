@@ -1,0 +1,50 @@
+﻿@model TourMVC.Models.Tour
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Tour</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TourId" />
+            <div class="form-group">
+                <label asp-for="TourTen" class="control-label"></label>
+                <input asp-for="TourTen" class="form-control" />
+                <span asp-validation-for="TourTen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TourMoTa" class="control-label"></label>
+                <input asp-for="TourMoTa" class="form-control" />
+                <span asp-validation-for="TourMoTa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LoaiId" class="control-label"></label>
+                <select asp-for="LoaiId" class="form-control" asp-items="ViewBag.LoaiId"></select>
+                <span asp-validation-for="LoaiId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgayTao" class="control-label"></label>
+                <input asp-for="NgayTao" class="form-control" />
+                <span asp-validation-for="NgayTao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

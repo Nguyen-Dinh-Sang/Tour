@@ -7,7 +7,7 @@ namespace TourMVC.Models
     {
         public TourGia()
         {
-            Tour = new HashSet<Tour>();
+            GiaTourHienTai = new HashSet<GiaTourHienTai>();
         }
 
         public int GiaId { get; set; }
@@ -17,6 +17,7 @@ namespace TourMVC.Models
         public DateTime GiaDenNgay { get; set; }
         public DateTime? NgayTao { get; set; }
 
-        public virtual ICollection<Tour> Tour { get; set; }
+        public virtual Tour Tour { get; set; }
+        public virtual ICollection<GiaTourHienTai> GiaTourHienTai { get; set; }
     }
 }
