@@ -1,0 +1,44 @@
+﻿@model TourMVC.Models.TourLoaiChiPhi
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>TourLoaiChiPhi</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="LoaiChiPhiTen" class="control-label"></label>
+                <input asp-for="LoaiChiPhiTen" class="form-control" />
+                <span asp-validation-for="LoaiChiPhiTen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LoaiChiPhiMoTa" class="control-label"></label>
+                <input asp-for="LoaiChiPhiMoTa" class="form-control" />
+                <span asp-validation-for="LoaiChiPhiMoTa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LoaiChiPhiSoTien" class="control-label"></label>
+                <input asp-for="LoaiChiPhiSoTien" class="form-control" />
+                <span asp-validation-for="LoaiChiPhiSoTien" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

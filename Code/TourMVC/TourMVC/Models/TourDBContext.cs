@@ -6,20 +6,8 @@ namespace TourMVC.Models
 {
     public partial class TourDBContext : DbContext
     {
-        private static TourDBContext instance;
-        private TourDBContext()
+        public TourDBContext()
         {
-
-        }
-
-        public static TourDBContext getInstance()
-        {
-            if (instance == null)
-            {
-                instance = new TourDBContext();
-            }
-
-            return instance;
         }
 
         public TourDBContext(DbContextOptions<TourDBContext> options)
@@ -29,6 +17,7 @@ namespace TourMVC.Models
 
         public virtual DbSet<DoanKhachHang> DoanKhachHang { get; set; }
         public virtual DbSet<DoanNhanVien> DoanNhanVien { get; set; }
+        public virtual DbSet<GiaTourHienTai> GiaTourHienTai { get; set; }
         public virtual DbSet<Tour> Tour { get; set; }
         public virtual DbSet<TourChiPhi> TourChiPhi { get; set; }
         public virtual DbSet<TourChiPhiChiTiet> TourChiPhiChiTiet { get; set; }
@@ -107,11 +96,39 @@ namespace TourMVC.Models
                     .HasConstraintName("Doan_NhanVien_Tour_NhanVien");
             });
 
+            modelBuilder.Entity<GiaTourHienTai>(entity =>
+            {
+                entity.HasKey(e => e.TourId)
+                    .HasName("PK__Gia_Tour__D436A863CD1F8CC4");
+
+                entity.ToTable("Gia_Tour_HienTai");
+
+                entity.Property(e => e.TourId)
+                    .HasColumnName("Tour_ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.GiaId).HasColumnName("Gia_ID");
+
+                entity.Property(e => e.NgayTao)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Gia)
+                    .WithMany(p => p.GiaTourHienTai)
+                    .HasForeignKey(d => d.GiaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Gia_Tour_HienTai_Tour_Gia");
+
+                entity.HasOne(d => d.Tour)
+                    .WithOne(p => p.GiaTourHienTai)
+                    .HasForeignKey<GiaTourHienTai>(d => d.TourId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Gia_Tour_HienTai_Tour");
+            });
+
             modelBuilder.Entity<Tour>(entity =>
             {
                 entity.Property(e => e.TourId).HasColumnName("Tour_ID");
-
-                entity.Property(e => e.GiaId).HasColumnName("Gia_ID");
 
                 entity.Property(e => e.LoaiId).HasColumnName("Loai_ID");
 
@@ -129,11 +146,6 @@ namespace TourMVC.Models
                     .HasColumnName("Tour_Ten")
                     .HasMaxLength(100);
 
-                entity.HasOne(d => d.Gia)
-                    .WithMany(p => p.Tour)
-                    .HasForeignKey(d => d.GiaId)
-                    .HasConstraintName("Tour_Tour_Gia");
-
                 entity.HasOne(d => d.Loai)
                     .WithMany(p => p.Tour)
                     .HasForeignKey(d => d.LoaiId)
@@ -143,7 +155,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourChiPhi>(entity =>
             {
                 entity.HasKey(e => e.ChiPhiId)
-                    .HasName("PK__Tour_Chi__EBF13941992AD634");
+                    .HasName("PK__Tour_Chi__EBF1394139BB9AB4");
 
                 entity.ToTable("Tour_ChiPhi");
 
@@ -166,7 +178,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourChiPhiChiTiet>(entity =>
             {
                 entity.HasKey(e => e.ChiPhiChiTietId)
-                    .HasName("PK__Tour_Chi__25171F8AB3B68F5D");
+                    .HasName("PK__Tour_Chi__25171F8A14B5300D");
 
                 entity.ToTable("Tour_ChiPhi_ChiTiet");
 
@@ -196,7 +208,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourChiTiet>(entity =>
             {
                 entity.HasKey(e => e.ChiTietId)
-                    .HasName("PK__Tour_Chi__202A63BFC6D52807");
+                    .HasName("PK__Tour_Chi__202A63BFB4F9865C");
 
                 entity.ToTable("Tour_ChiTiet");
 
@@ -226,7 +238,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourDiaDiem>(entity =>
             {
                 entity.HasKey(e => e.DiaDiemId)
-                    .HasName("PK__Tour_Dia__4833C9E9E0129C3C");
+                    .HasName("PK__Tour_Dia__4833C9E9F5A086BE");
 
                 entity.ToTable("Tour_DiaDiem");
 
@@ -255,7 +267,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourDoan>(entity =>
             {
                 entity.HasKey(e => e.DoanId)
-                    .HasName("PK__Tour_Doa__A3F3C502F513BAD5");
+                    .HasName("PK__Tour_Doa__A3F3C50211E48106");
 
                 entity.ToTable("Tour_Doan");
 
@@ -298,7 +310,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourGia>(entity =>
             {
                 entity.HasKey(e => e.GiaId)
-                    .HasName("PK__Tour_Gia__84F8236AF8DEBDF2");
+                    .HasName("PK__Tour_Gia__84F8236A6CBD957F");
 
                 entity.ToTable("Tour_Gia");
 
@@ -321,12 +333,17 @@ namespace TourMVC.Models
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.TourId).HasColumnName("Tour_ID");
+
+                entity.HasOne(d => d.Tour)
+                    .WithMany(p => p.TourGia)
+                    .HasForeignKey(d => d.TourId)
+                    .HasConstraintName("Tour_Gia_Tour");
             });
 
             modelBuilder.Entity<TourKhachHang>(entity =>
             {
                 entity.HasKey(e => e.KhachHangId)
-                    .HasName("PK__Tour_Kha__16A1551A33E53172");
+                    .HasName("PK__Tour_Kha__16A1551A8F147D5E");
 
                 entity.ToTable("Tour_KhachHang");
 
@@ -365,7 +382,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourLoai>(entity =>
             {
                 entity.HasKey(e => e.LoaiId)
-                    .HasName("PK__Tour_Loa__09F6C3C912B32DC6");
+                    .HasName("PK__Tour_Loa__09F6C3C9F469DD9F");
 
                 entity.ToTable("Tour_Loai");
 
@@ -389,7 +406,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourLoaiChiPhi>(entity =>
             {
                 entity.HasKey(e => e.LoaiChiPhiId)
-                    .HasName("PK__Tour_Loa__B98AEDC8107C8D9A");
+                    .HasName("PK__Tour_Loa__B98AEDC84F7AEDC6");
 
                 entity.ToTable("Tour_LoaiChiPhi");
 
@@ -417,7 +434,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourNhanVien>(entity =>
             {
                 entity.HasKey(e => e.NhanVienId)
-                    .HasName("PK__Tour_Nha__A5A85E23FF951A7D");
+                    .HasName("PK__Tour_Nha__A5A85E2340BE0A1D");
 
                 entity.ToTable("Tour_NhanVien");
 

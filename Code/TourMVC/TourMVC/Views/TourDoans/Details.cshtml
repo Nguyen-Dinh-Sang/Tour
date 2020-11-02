@@ -1,0 +1,61 @@
+﻿@model TourMVC.Models.TourDoan
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>TourDoan</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanTen)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DoanTen)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanNgayDi)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DoanNgayDi)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanNgayVe)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DoanNgayVe)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanChiTiet)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DoanChiTiet)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanGiaTour)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DoanGiaTour)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NgayTao)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NgayTao)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tour)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tour.TourMoTa)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DoanId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
