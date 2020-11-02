@@ -13,7 +13,7 @@ namespace TourMVC.Models
 
         public int LoaiId { get; set; }
         [Display(Name = "Tên Loại")]
-        //[Required(ErrorMessage = "Thứ Tự Bài Học Không Được Để Trống")]
+        //[Required(ErrorMessage = "Không Được Để Trống")]
         public string LoaiTen { get; set; }
         [Display(Name = "Mô Tả")]
         public string LoaiMoTa { get; set; }

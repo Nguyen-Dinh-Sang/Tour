@@ -99,7 +99,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<GiaTourHienTai>(entity =>
             {
                 entity.HasKey(e => e.TourId)
-                    .HasName("PK__Gia_Tour__D436A863CD1F8CC4");
+                    .HasName("PK__Gia_Tour__D436A863E62A311E");
 
                 entity.ToTable("Gia_Tour_HienTai");
 
@@ -122,7 +122,6 @@ namespace TourMVC.Models
                 entity.HasOne(d => d.Tour)
                     .WithOne(p => p.GiaTourHienTai)
                     .HasForeignKey<GiaTourHienTai>(d => d.TourId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Gia_Tour_HienTai_Tour");
             });
 
@@ -155,7 +154,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourChiPhi>(entity =>
             {
                 entity.HasKey(e => e.ChiPhiId)
-                    .HasName("PK__Tour_Chi__EBF1394139BB9AB4");
+                    .HasName("PK__Tour_Chi__EBF1394177AB9E10");
 
                 entity.ToTable("Tour_ChiPhi");
 
@@ -178,7 +177,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourChiPhiChiTiet>(entity =>
             {
                 entity.HasKey(e => e.ChiPhiChiTietId)
-                    .HasName("PK__Tour_Chi__25171F8A14B5300D");
+                    .HasName("PK__Tour_Chi__25171F8A9FAF2F11");
 
                 entity.ToTable("Tour_ChiPhi_ChiTiet");
 
@@ -208,7 +207,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourChiTiet>(entity =>
             {
                 entity.HasKey(e => e.ChiTietId)
-                    .HasName("PK__Tour_Chi__202A63BFB4F9865C");
+                    .HasName("PK__Tour_Chi__202A63BFCA180F17");
 
                 entity.ToTable("Tour_ChiTiet");
 
@@ -238,7 +237,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourDiaDiem>(entity =>
             {
                 entity.HasKey(e => e.DiaDiemId)
-                    .HasName("PK__Tour_Dia__4833C9E9F5A086BE");
+                    .HasName("PK__Tour_Dia__4833C9E918951F33");
 
                 entity.ToTable("Tour_DiaDiem");
 
@@ -267,7 +266,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourDoan>(entity =>
             {
                 entity.HasKey(e => e.DoanId)
-                    .HasName("PK__Tour_Doa__A3F3C50211E48106");
+                    .HasName("PK__Tour_Doa__A3F3C502D658990A");
 
                 entity.ToTable("Tour_Doan");
 
@@ -310,7 +309,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourGia>(entity =>
             {
                 entity.HasKey(e => e.GiaId)
-                    .HasName("PK__Tour_Gia__84F8236A6CBD957F");
+                    .HasName("PK__Tour_Gia__84F8236A20736132");
 
                 entity.ToTable("Tour_Gia");
 
@@ -343,7 +342,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourKhachHang>(entity =>
             {
                 entity.HasKey(e => e.KhachHangId)
-                    .HasName("PK__Tour_Kha__16A1551A8F147D5E");
+                    .HasName("PK__Tour_Kha__16A1551AA201CE44");
 
                 entity.ToTable("Tour_KhachHang");
 
@@ -382,7 +381,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourLoai>(entity =>
             {
                 entity.HasKey(e => e.LoaiId)
-                    .HasName("PK__Tour_Loa__09F6C3C9F469DD9F");
+                    .HasName("PK__Tour_Loa__09F6C3C90D746885");
 
                 entity.ToTable("Tour_Loai");
 
@@ -406,7 +405,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourLoaiChiPhi>(entity =>
             {
                 entity.HasKey(e => e.LoaiChiPhiId)
-                    .HasName("PK__Tour_Loa__B98AEDC84F7AEDC6");
+                    .HasName("PK__Tour_Loa__B98AEDC8BE04DC0C");
 
                 entity.ToTable("Tour_LoaiChiPhi");
 
@@ -434,7 +433,7 @@ namespace TourMVC.Models
             modelBuilder.Entity<TourNhanVien>(entity =>
             {
                 entity.HasKey(e => e.NhanVienId)
-                    .HasName("PK__Tour_Nha__A5A85E2340BE0A1D");
+                    .HasName("PK__Tour_Nha__A5A85E23B9A40457");
 
                 entity.ToTable("Tour_NhanVien");
 
