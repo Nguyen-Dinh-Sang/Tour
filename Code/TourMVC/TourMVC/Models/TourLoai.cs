@@ -17,6 +17,8 @@ namespace TourMVC.Models
         public string LoaiTen { get; set; }
         [Display(Name = "Mô Tả")]
         public string LoaiMoTa { get; set; }
+        [Display(Name = "Ngày Tạo")]
+        [DataType(DataType.Date)]
         public DateTime? NgayTao { get; set; }
 
         public virtual ICollection<Tour> Tour { get; set; }
