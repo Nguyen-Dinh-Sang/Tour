@@ -11,17 +11,18 @@ namespace TourMVC.Controllers
 {
     public class TourLoaisController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
+        private static int? loaiTourId;
 
         public TourLoaisController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: TourLoais
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TourLoai.ToListAsync());
+            return View(await context.TourLoai.ToListAsync());
         }
 
         // GET: TourLoais/Details/5
@@ -32,13 +33,14 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourLoai = await _context.TourLoai
+            var tourLoai = await context.TourLoai
                 .FirstOrDefaultAsync(m => m.LoaiId == id);
+            context.Entry(tourLoai).Collection(tl => tl.Tour).Load();
             if (tourLoai == null)
             {
                 return NotFound();
             }
-
+            loaiTourId = id;
             return View(tourLoai);
         }
 
@@ -48,17 +50,14 @@ namespace TourMVC.Controllers
             return View();
         }
 
-        // POST: TourLoais/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LoaiId,LoaiTen,LoaiMoTa,NgayTao")] TourLoai tourLoai)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tourLoai);
-                await _context.SaveChangesAsync();
+                context.Add(tourLoai);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tourLoai);
@@ -72,7 +71,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourLoai = await _context.TourLoai.FindAsync(id);
+            var tourLoai = await context.TourLoai.FindAsync(id);
             if (tourLoai == null)
             {
                 return NotFound();
@@ -80,9 +79,6 @@ namespace TourMVC.Controllers
             return View(tourLoai);
         }
 
-        // POST: TourLoais/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LoaiId,LoaiTen,LoaiMoTa,NgayTao")] TourLoai tourLoai)
@@ -96,8 +92,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tourLoai);
-                    await _context.SaveChangesAsync();
+                    context.Update(tourLoai);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,7 +119,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourLoai = await _context.TourLoai
+            var tourLoai = await context.TourLoai
                 .FirstOrDefaultAsync(m => m.LoaiId == id);
             if (tourLoai == null)
             {
@@ -138,15 +134,102 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tourLoai = await _context.TourLoai.FindAsync(id);
-            _context.TourLoai.Remove(tourLoai);
-            await _context.SaveChangesAsync();
+            var tourLoai = await context.TourLoai.FindAsync(id);
+            context.TourLoai.Remove(tourLoai);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourLoaiExists(int id)
         {
-            return _context.TourLoai.Any(e => e.LoaiId == id);
+            return context.TourLoai.Any(e => e.LoaiId == id);
+        }
+
+        // GET: TourLoais/EditTour/5
+        public async Task<IActionResult> EditTour(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tour = await context.Tour.FindAsync(id);
+            if (tour == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiTen", tour.LoaiId);
+            return View(tour);
+        }
+
+        // POST: TourLoais/EditTour/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditTour(int id, [Bind("TourId,TourTen,TourMoTa,LoaiId,NgayTao")] Tour tour)
+        {
+            if (id != tour.TourId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    context.Update(tour);
+                    await context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TourExists(tour.TourId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Details), new { id = loaiTourId });
+            }
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiTen", tour.LoaiId);
+            return View(tour);
+        }
+
+        private bool TourExists(int id)
+        {
+            return context.Tour.Any(e => e.TourId == id);
+        }
+
+        // GET: TourLoais/DeleteTour/5
+        public async Task<IActionResult> DeleteTour(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tour = await context.Tour
+                .Include(t => t.Loai)
+                .FirstOrDefaultAsync(m => m.TourId == id);
+            if (tour == null)
+            {
+                return NotFound();
+            }
+
+            return View(tour);
+        }
+
+        // POST: TourLoais/DeleteTour/5
+        [HttpPost, ActionName("DeleteTour")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTourConfirmed(int id)
+        {
+            var tour = await context.Tour.FindAsync(id);
+            context.Tour.Remove(tour);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details),new { id = tour.LoaiId });
         }
     }
 }

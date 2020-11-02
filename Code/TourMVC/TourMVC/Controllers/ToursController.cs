@@ -11,17 +11,17 @@ namespace TourMVC.Controllers
 {
     public class ToursController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public ToursController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: Tours
         public async Task<IActionResult> Index()
         {
-            var tourDBContext = _context.Tour.Include(t => t.Loai);
+            var tourDBContext = context.Tour.Include(t => t.Loai);
             return View(await tourDBContext.ToListAsync());
         }
 
@@ -33,7 +33,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tour = await _context.Tour
+            var tour = await context.Tour
                 .Include(t => t.Loai)
                 .FirstOrDefaultAsync(m => m.TourId == id);
             if (tour == null)
@@ -47,7 +47,7 @@ namespace TourMVC.Controllers
         // GET: Tours/Create
         public IActionResult Create()
         {
-            ViewData["LoaiId"] = new SelectList(_context.TourLoai, "LoaiId", "LoaiMoTa");
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa");
             return View();
         }
 
@@ -60,11 +60,11 @@ namespace TourMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tour);
-                await _context.SaveChangesAsync();
+                context.Add(tour);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoaiId"] = new SelectList(_context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
             return View(tour);
         }
 
@@ -76,12 +76,12 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tour = await _context.Tour.FindAsync(id);
+            var tour = await context.Tour.FindAsync(id);
             if (tour == null)
             {
                 return NotFound();
             }
-            ViewData["LoaiId"] = new SelectList(_context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
             return View(tour);
         }
 
@@ -101,8 +101,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tour);
-                    await _context.SaveChangesAsync();
+                    context.Update(tour);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,7 +117,7 @@ namespace TourMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoaiId"] = new SelectList(_context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
             return View(tour);
         }
 
@@ -129,7 +129,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tour = await _context.Tour
+            var tour = await context.Tour
                 .Include(t => t.Loai)
                 .FirstOrDefaultAsync(m => m.TourId == id);
             if (tour == null)
@@ -145,15 +145,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tour = await _context.Tour.FindAsync(id);
-            _context.Tour.Remove(tour);
-            await _context.SaveChangesAsync();
+            var tour = await context.Tour.FindAsync(id);
+            context.Tour.Remove(tour);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourExists(int id)
         {
-            return _context.Tour.Any(e => e.TourId == id);
+            return context.Tour.Any(e => e.TourId == id);
         }
     }
 }
