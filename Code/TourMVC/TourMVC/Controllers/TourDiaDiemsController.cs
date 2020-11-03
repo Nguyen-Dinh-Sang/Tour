@@ -19,11 +19,54 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourDiaDiems
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int PageNumber = 1)
         {
-            return View(await _context.TourDiaDiem.ToListAsync());
+            
+            var tourDiaDiems = (from l in _context.TourDiaDiem
+                         select l).OrderBy(x => x.DiaDiemThanhPho);
+            ViewBag.TotalPages = Math.Ceiling(tourDiaDiems.Count() / 5.0);
+            Console.WriteLine("so dòng"+tourDiaDiems.Count());
+            var listTourDiaDiem = tourDiaDiems.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourDiaDiem);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> Index(string classify,string searchString, int PageNumber = 1)
+        {
+            Console.WriteLine("oke");
+            IEnumerable<TourDiaDiem> listTourDiaDiem;
+            var tourDiaDiems = (from l in _context.TourDiaDiem
+                                select l).OrderBy(x => x.DiaDiemThanhPho);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourDiaDiems.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Địa điểm thành phố") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDiaDiem =  tourDiaDiems.Where(s => s.DiaDiemThanhPho.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDiaDiem.Count() / 5.0);
+                return View(listTourDiaDiem.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên địa điểm") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDiaDiem = tourDiaDiems.Where(s => s.DiaDiemTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDiaDiem.Count() / 5.0);
+                return View(listTourDiaDiem.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Mô tả địa điểm") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDiaDiem = tourDiaDiems.Where(s => s.DiaDiemMoTa.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDiaDiem.Count() / 5.0);
+                return View(listTourDiaDiem.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            return View(tourDiaDiems.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourDiaDiems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
