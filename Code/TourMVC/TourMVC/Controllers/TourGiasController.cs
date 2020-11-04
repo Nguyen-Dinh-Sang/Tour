@@ -19,12 +19,46 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourGias
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.TourGia.Include(t => t.Tour);
-            return View(await tourDBContext.ToListAsync());
+            var tourDBContext = _context.TourGia.Include(t => t.Tour).OrderBy(x=>x.Tour.TourTen);
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTourGia = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourGia);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
+        {
 
+            IEnumerable<TourGia> listTourGia;
+            var tourGias = (from l in _context.TourGia
+                                   select l).Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourGias.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên tour") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourGia = tourGias.Where(s => s.Tour.TourTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourGia.Count() / 5.0);
+                return View(listTourGia.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (GiaDen != 0)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.GiaTu = GiaTu;
+                ViewBag.GiaDen = GiaDen;
+                ViewBag.PageNumber = PageNumber;
+                listTourGia = tourGias.Where(s => s.GiaSoTien > GiaTu && s.GiaSoTien <= GiaDen);
+                ViewBag.TotalPages = Math.Ceiling(listTourGia.Count() / 5.0);
+                return View(listTourGia.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+
+
+            return View(tourGias.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourGias/Details/5
         public async Task<IActionResult> Details(int? id)
         {

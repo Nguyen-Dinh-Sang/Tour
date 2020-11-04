@@ -19,12 +19,42 @@ namespace TourMVC.Controllers
         }
 
         // GET: DoanKhachHangs
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.DoanKhachHang.Include(d => d.Doan).Include(d => d.KhachHang);
-            return View(await tourDBContext.ToListAsync());
+            var tourDBContext = _context.DoanKhachHang.Include(d => d.Doan).Include(d => d.KhachHang).OrderBy(x=>x.Doan.DoanTen);
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTourDoanKhachHang = tourDBContext.Skip((PageNumber - 1) * 5).Take(5);
+            return View(listTourDoanKhachHang.ToListAsync());
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
 
+            IEnumerable<DoanKhachHang> listTourDoanKhachHang;
+            var tourDoanKhachHangs = (from l in _context.DoanKhachHang
+                                select l).Include(d => d.Doan).Include(d => d.KhachHang).OrderBy(x => x.Doan.DoanTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourDoanKhachHangs.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên đoàn") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDoanKhachHang = tourDoanKhachHangs.Where(s => s.Doan.DoanTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDoanKhachHang.Count() / 5.0);
+                return View(listTourDoanKhachHang.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên khách hàng") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDoanKhachHang = tourDoanKhachHangs.Where(s => s.KhachHang.KhachHangTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDoanKhachHang.Count() / 5.0);
+                return View(listTourDoanKhachHang.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            return View(tourDoanKhachHangs.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: DoanKhachHangs/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -19,12 +19,53 @@ namespace TourMVC.Controllers
         }
 
         // GET: Tours
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
             var tourDBContext = context.Tour.Include(t => t.Loai);
-            return View(await tourDBContext.ToListAsync());
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTour = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTour);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
 
+            IEnumerable<Tour> listTour;
+            var tour = (from l in context.Tour
+                             select l).Include(t => t.Loai).OrderBy(x => x.TourTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tour.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên tour") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTour = tour.Where(s => s.TourTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTour.Count() / 5.0);
+                return View(listTour.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Mô tả tour") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTour = tour.Where(s => s.TourMoTa.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTour.Count() / 5.0);
+                return View(listTour.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Loại tour") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTour = tour.Where(s => s.Loai.LoaiTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTour.Count() / 5.0);
+                return View(listTour.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+
+
+            return View(tour.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: Tours/Details/5
         public async Task<IActionResult> Details(int? id)
         {

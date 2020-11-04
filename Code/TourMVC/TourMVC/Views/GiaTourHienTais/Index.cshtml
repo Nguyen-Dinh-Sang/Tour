@@ -5,11 +5,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Danh sách giá tour hiện tại</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@using (Html.BeginForm("Index", "GiaTourHienTais", FormMethod.Get))
+{
+    <p>
+        Giá từ:
+        <select id="GiaTourTu" name="GiaTourTu">
+            @for (int i = 0; i <= 100000000; i += 100000)
+            {
+                <option>@i</option>
+            }
+
+        </select>
+        <select id="GiaTourDen" name="GiaTourDen">
+            Đến:
+            @for (int i = 0; i <= 100000000; i += 100000)
+            {
+                <option>@i</option>
+            }
+        </select>
+        <input type="submit" value="Tìm kiếm" />
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -26,23 +47,44 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gia.GiaId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tour.TourMoTa)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TourId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TourId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TourId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gia.GiaSoTien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tour.TourTen)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.TourId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.TourId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TourId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@{
+    double totalPages = ViewBag.TotalPages;
+    int PageNumber = ViewBag.PageNumber;
+    <div class="pagination" style="float:left">
+        @if (totalPages != 0)
+        {
+            @if (PageNumber > 1)
+            {
+                @Html.ActionLink("<<<", "Index", new { GiaTourTu = ViewBag.GiaTourTu, GiaTourDen = ViewBag.GiaTourDen, PageNumber = PageNumber - 1 })
+            }
+        <label>@PageNumber</label>
+        @if (PageNumber != totalPages)
+        {
+            @Html.ActionLink(">>>", "Index", new { GiaTourTu = ViewBag.GiaTourTu, GiaTourDen = ViewBag.GiaTourDen, PageNumber = PageNumber + 1 })
+        }   
+        }
+
+    </div>
+
+}

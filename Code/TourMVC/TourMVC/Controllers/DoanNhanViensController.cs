@@ -19,12 +19,53 @@ namespace TourMVC.Controllers
         }
 
         // GET: DoanNhanViens
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.DoanNhanVien.Include(d => d.Doan).Include(d => d.NhanVien);
-            return View(await tourDBContext.ToListAsync());
+            var tourDBContext = _context.DoanNhanVien.Include(d => d.Doan).Include(d => d.NhanVien).OrderBy(x=>x.Doan.DoanTen);
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listDoanNhanVien = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listDoanNhanVien);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
 
+            IEnumerable<DoanNhanVien> listDoanNhanVien;
+            var DoanNhanViens = (from l in _context.DoanNhanVien
+                             select l).Include(d => d.Doan).Include(d => d.NhanVien).OrderBy(x => x.Doan.DoanTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(DoanNhanViens.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên đoàn") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listDoanNhanVien = DoanNhanViens.Where(s => s.Doan.DoanTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listDoanNhanVien.Count() / 5.0);
+                return View(listDoanNhanVien.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Nhiệm vụ nhân viên") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listDoanNhanVien = DoanNhanViens.Where(s => s.NhanVienNhiemVu.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listDoanNhanVien.Count() / 5.0);
+                return View(listDoanNhanVien.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên nhân viên") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listDoanNhanVien = DoanNhanViens.Where(s => s.NhanVien.NhanVienTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listDoanNhanVien.Count() / 5.0);
+                return View(listDoanNhanVien.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+
+
+            return View(DoanNhanViens.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: DoanNhanViens/Details/5
         public async Task<IActionResult> Details(int? id)
         {

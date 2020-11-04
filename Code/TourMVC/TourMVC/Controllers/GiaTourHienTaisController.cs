@@ -19,12 +19,33 @@ namespace TourMVC.Controllers
         }
 
         // GET: GiaTourHienTais
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour);
-            return View(await tourDBContext.ToListAsync());
+            var tourDBContext =_context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour);
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTourGiaHienTai = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourGiaHienTai);
         }
+        [HttpGet]
+        public IActionResult Index(long GiaTourTu, long GiaTourDen, int PageNumber = 1)
+        {
 
+            IEnumerable<GiaTourHienTai> listTourGiaHienTai;
+          
+            var tourDBContext = _context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour).OrderBy(x => x.Tour.TourTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            if (GiaTourDen!=0)
+            {
+                ViewBag.GiaTourTu = GiaTourTu ;
+                ViewBag.GiaTourDen =GiaTourDen;
+                ViewBag.PageNumber = PageNumber;
+                listTourGiaHienTai = tourDBContext.Where(s => s.Gia.GiaSoTien>GiaTourTu && s.Gia.GiaSoTien<=GiaTourDen);
+                ViewBag.TotalPages = Math.Ceiling(listTourGiaHienTai.Count() / 5.0);
+                return View(listTourGiaHienTai.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            return View(tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: GiaTourHienTais/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Danh sách các địa điểm Tour</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -68,7 +68,6 @@
 @{
     double totalPages = ViewBag.TotalPages;
     int PageNumber = ViewBag.PageNumber;
-    <p> tong trang @totalPages</p>
     <div class="pagination" style="float:left">
         @if (PageNumber > 1)
         {

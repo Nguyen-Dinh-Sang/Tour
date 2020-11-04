@@ -20,9 +20,43 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourLoais
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            return View(await context.TourLoai.ToListAsync());
+            var tourLoais = (from l in context.TourLoai
+                                select l).OrderBy(x => x.LoaiTen);
+            ViewBag.TotalPages = Math.Ceiling(tourLoais.Count() / 5.0);
+            var listTourLoai = tourLoais.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourLoai);
+        }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
+
+            IEnumerable<TourLoai> listTourLoai;
+            var tourLoais = (from l in context.TourLoai
+                                select l).OrderBy(x => x.LoaiTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourLoais.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên loại") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourLoai = tourLoais.Where(s => s.LoaiTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourLoai.Count() / 5.0);
+                return View(listTourLoai.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Mô tả loại") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourLoai = tourLoais.Where(s => s.LoaiMoTa.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourLoai.Count() / 5.0);
+                return View(listTourLoai.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            
+            return View(tourLoais.Skip((PageNumber - 1) * 5).Take(5).ToList());
         }
 
         // GET: TourLoais/Details/5
