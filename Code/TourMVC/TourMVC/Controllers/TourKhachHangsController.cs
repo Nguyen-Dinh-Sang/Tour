@@ -19,11 +19,61 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourKhachHangs
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            return View(await _context.TourKhachHang.ToListAsync());
+            var tourKhachHangs = (from l in _context.TourKhachHang
+                                select l).OrderBy(x => x.KhachHangTen);
+            ViewBag.TotalPages = Math.Ceiling(tourKhachHangs.Count() / 5.0);
+            var listTourKhachHang = tourKhachHangs.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourKhachHang);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
 
+            IEnumerable<TourKhachHang> listTourKhachHang;
+            var tourKhachHangs = (from l in _context.TourKhachHang
+                                select l).OrderBy(x => x.KhachHangTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourKhachHangs.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên khách hàng") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourKhachHang = tourKhachHangs.Where(s => s.KhachHangTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourKhachHang.Count() / 5.0);
+                return View(listTourKhachHang.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Số điện thoại") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourKhachHang = tourKhachHangs.Where(s => s.KhachHangSoDienThoai.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourKhachHang.Count() / 5.0);
+                return View(listTourKhachHang.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Email") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourKhachHang = tourKhachHangs.Where(s => s.KhachHangEmail.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourKhachHang.Count() / 5.0);
+                return View(listTourKhachHang.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Số chứng minh nhân dân") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourKhachHang = tourKhachHangs.Where(s => s.KhachHangChungMinhNhanDan.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourKhachHang.Count() / 5.0);
+                return View(listTourKhachHang.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            return View(tourKhachHangs.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourKhachHangs/Details/5
         public async Task<IActionResult> Details(int? id)
         {

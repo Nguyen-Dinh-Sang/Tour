@@ -5,11 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Danh sách khách hàng</h1>
 
+@using (Html.BeginForm("Index", "TourKhachHangs", FormMethod.Get))
+{
+    <p>
+        Loại:
+        <select id="classify" name="classify">
+            <option>Tên khách hàng</option>
+            <option>Số điện thoại</option>
+            <option>Email</option>
+            <option>Số chứng minh nhân dân</option>
+        </select>
+        Nội dung: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
+    </p>
+}
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -35,32 +49,49 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.KhachHangTen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KhachHangSoDienThoai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KhachHangEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KhachHangNgaySinh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KhachHangChungMinhNhanDan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.KhachHangId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.KhachHangId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.KhachHangId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KhachHangTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KhachHangSoDienThoai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KhachHangEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KhachHangNgaySinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KhachHangChungMinhNhanDan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.KhachHangId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.KhachHangId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.KhachHangId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@{
+    double totalPages = ViewBag.TotalPages;
+    int PageNumber = ViewBag.PageNumber;
+    <div class="pagination" style="float:left">
+        @if (PageNumber > 1)
+        {
+            @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber - 1 })
+        }
+        <label>@PageNumber</label>
+        @if (PageNumber != totalPages)
+        {
+            @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber + 1 })
+        }
+    </div>
+
+}

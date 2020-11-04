@@ -19,12 +19,53 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourDoans
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.TourDoan.Include(t => t.Tour);
-            return View(await tourDBContext.ToListAsync());
+            var tourDBContext = _context.TourDoan.Include(t => t.Tour).OrderBy(x=>x.DoanTen);
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTourDoan = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourDoan);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
 
+            IEnumerable<TourDoan> listTourDoan;
+            var tourDoans = (from l in _context.TourDoan
+                                   select l).Include(t=>t.Tour).OrderBy(x => x.DoanTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourDoans.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên đoàn") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDoan = tourDoans.Where(s => s.DoanTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDoan.Count() / 5.0);
+                return View(listTourDoan.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Chi tiết đoàn") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDoan = tourDoans.Where(s => s.DoanChiTiet.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDoan.Count() / 5.0);
+                return View(listTourDoan.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên tour") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourDoan = tourDoans.Where(s => s.Tour.TourTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDoan.Count() / 5.0);
+                return View(listTourDoan.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+
+
+            return View(tourDoans.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourDoans/Details/5
         public async Task<IActionResult> Details(int? id)
         {

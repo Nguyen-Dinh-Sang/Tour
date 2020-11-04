@@ -19,11 +19,56 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourLoaiChiPhis
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber=1)
         {
-            return View(await _context.TourLoaiChiPhi.ToListAsync());
+            var tourLoaiChiPhis = (from l in _context.TourLoaiChiPhi
+                                   select l).OrderBy(x => x.LoaiChiPhiTen);
+            ViewBag.TotalPages = Math.Ceiling(tourLoaiChiPhis.Count() / 5.0);
+            var listTourLoaiChiPhi = tourLoaiChiPhis.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourLoaiChiPhi);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString,long GiaChiPhiTu, long GiaChiPhiDen, int PageNumber = 1)
+        {
 
+            IEnumerable<TourLoaiChiPhi> listTourLoaiChiPhi;
+            var tourLoaiChiPhis = (from l in _context.TourLoaiChiPhi
+                                   select l).OrderBy(x => x.LoaiChiPhiTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourLoaiChiPhis.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourLoaiChiPhi = tourLoaiChiPhis.Where(s => s.LoaiChiPhiTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourLoaiChiPhi.Count() / 5.0);
+                return View(listTourLoaiChiPhi.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Mô tả") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourLoaiChiPhi = tourLoaiChiPhis.Where(s => s.LoaiChiPhiTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourLoaiChiPhi.Count() / 5.0);
+                return View(listTourLoaiChiPhi.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (GiaChiPhiDen!=0)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.GiaChiPhiTu = GiaChiPhiTu;
+                ViewBag.GiaChiPhiDen = GiaChiPhiDen;
+                ViewBag.PageNumber = PageNumber;
+                listTourLoaiChiPhi = tourLoaiChiPhis.Where(s => s.LoaiChiPhiSoTien > GiaChiPhiTu && s.LoaiChiPhiSoTien <= GiaChiPhiDen);
+                ViewBag.TotalPages = Math.Ceiling(listTourLoaiChiPhi.Count() / 5.0);
+                return View(listTourLoaiChiPhi.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+                
+
+            return View(tourLoaiChiPhis.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourLoaiChiPhis/Details/5
         public async Task<IActionResult> Details(int? id)
         {

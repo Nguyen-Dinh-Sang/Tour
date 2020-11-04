@@ -19,11 +19,52 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourNhanViens
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            return View(await _context.TourNhanVien.ToListAsync());
+            var tourNhanViens = (from l in _context.TourNhanVien
+                                  select l).OrderBy(x => x.NhanVienTen);
+            ViewBag.TotalPages = Math.Ceiling(tourNhanViens.Count() / 5.0);
+            var listTourNhanVien = tourNhanViens.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourNhanVien);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
 
+            IEnumerable<TourNhanVien> listTourNhanVien;
+            var tourNhanViens = (from l in _context.TourNhanVien
+                                  select l).OrderBy(x => x.NhanVienTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourNhanViens.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên nhân viên") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourNhanVien = tourNhanViens.Where(s => s.NhanVienTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourNhanVien.Count() / 5.0);
+                return View(listTourNhanVien.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Số điện thoại") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourNhanVien = tourNhanViens.Where(s => s.NhanVienSoDienThoai.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourNhanVien.Count() / 5.0);
+                return View(listTourNhanVien.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Email") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourNhanVien = tourNhanViens.Where(s => s.NhanVienEmail.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourNhanVien.Count() / 5.0);
+                return View(listTourNhanVien.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            return View(tourNhanViens.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourNhanViens/Details/5
         public async Task<IActionResult> Details(int? id)
         {

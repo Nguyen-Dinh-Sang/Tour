@@ -10,6 +10,17 @@
 <p>
     <a asp-action="Create">Thêm Loại Mới</a>
 </p>
+@using (Html.BeginForm("Index", "TourLoais", FormMethod.Get))
+{
+    <p>
+        Loại tìm kiếm:
+        <select id="classify" name="classify">
+            <option>Tên loại</option>
+            <option>Mô tả loại</option>
+        </select>
+        Title: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -23,20 +34,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoaiTen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoaiMoTa)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.LoaiId">Chỉnh Sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.LoaiId">Chi Tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.LoaiId">Xóa</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoaiTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoaiMoTa)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.LoaiId">Chỉnh Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.LoaiId">Chi Tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.LoaiId">Xóa</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@{
+    double totalPages = ViewBag.TotalPages;
+    int PageNumber = ViewBag.PageNumber;
+    <p> tong trang @totalPages</p>
+    <div class="pagination" style="float:left">
+        @if (PageNumber > 1)
+        {
+            @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber - 1 })
+        }
+        <label>@PageNumber</label>
+        @if (PageNumber != totalPages)
+        {
+            @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber + 1 })
+        }
+    </div>
+
+}

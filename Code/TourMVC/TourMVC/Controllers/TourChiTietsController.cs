@@ -19,12 +19,32 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourChiTiets
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
             var tourDBContext = _context.TourChiTiet.Include(t => t.DiaDiem).Include(t => t.Tour);
-            return View(await tourDBContext.ToListAsync());
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTourDBContext = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourDBContext);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        {
 
+            IEnumerable<TourChiTiet> listTourChiTiet;
+            var tourDBContext = _context.TourChiTiet.Include(t => t.DiaDiem).Include(t => t.Tour).OrderBy(x => x.DiaDiem);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên địa điểm") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourChiTiet = tourDBContext.Where(s => s.DiaDiem.DiaDiemTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourChiTiet.Count() / 5.0);
+                return View(listTourChiTiet.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            return View(tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourChiTiets/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -19,12 +19,46 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourChiPhis
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.TourChiPhi.Include(t => t.Doan);
-            return View(await tourDBContext.ToListAsync());
+            var tourDBContext = _context.TourChiPhi.Include(t => t.Doan).OrderBy(x=>x.Doan.DoanTen);
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTourChiPhi = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourChiPhi);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
+        {
 
+            IEnumerable<TourChiPhi> listTourChiPhi;
+            var tourChiPhis = (from l in _context.TourChiPhi
+                                   select l).Include(t => t.Doan).OrderBy(x => x.Doan.DoanTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourChiPhis.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên đoàn") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourChiPhi = tourChiPhis.Where(s => s.Doan.DoanTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourChiPhi.Count() / 5.0);
+                return View(listTourChiPhi.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (GiaDen != 0)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.GiaTu = GiaTu;
+                ViewBag.GiaDen = GiaDen;
+                ViewBag.PageNumber = PageNumber;
+                listTourChiPhi = tourChiPhis.Where(s => s.ChiPhiTong > GiaTu && s.ChiPhiTong <= GiaDen);
+                ViewBag.TotalPages = Math.Ceiling(listTourChiPhi.Count() / 5.0);
+                return View(listTourChiPhi.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+
+
+            return View(tourChiPhis.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourChiPhis/Details/5
         public async Task<IActionResult> Details(int? id)
         {

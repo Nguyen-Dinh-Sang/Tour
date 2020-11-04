@@ -19,12 +19,46 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourChiPhiChiTiets
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.TourChiPhiChiTiet.Include(t => t.ChiPhiNavigation).Include(t => t.LoaiChiPhi);
-            return View(await tourDBContext.ToListAsync());
+            var tourDBContext = _context.TourChiPhiChiTiet.Include(t => t.ChiPhiNavigation).Include(t => t.LoaiChiPhi).OrderBy(x=>x.LoaiChiPhi.LoaiChiPhiTen);
+            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
+            var listTourChiPhiChiTiet = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            return View(listTourChiPhiChiTiet);
         }
+        [HttpGet]
+        public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
+        {
 
+            IEnumerable<TourChiPhiChiTiet> listTourChiPhiChiTiet;
+            var tourChiPhiChiTiets = (from l in _context.TourChiPhiChiTiet
+                               select l).Include(t => t.ChiPhiNavigation).Include(t => t.LoaiChiPhi).OrderBy(x => x.LoaiChiPhi.LoaiChiPhiTen);
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(tourChiPhiChiTiets.Count() / 5.0);
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên loại chi phí") == true)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.PageNumber = PageNumber;
+                listTourChiPhiChiTiet = tourChiPhiChiTiets.Where(s => s.LoaiChiPhi.LoaiChiPhiTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourChiPhiChiTiet.Count() / 5.0);
+                return View(listTourChiPhiChiTiet.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (GiaDen != 0)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.GiaTu = GiaTu;
+                ViewBag.GiaDen = GiaDen;
+                ViewBag.PageNumber = PageNumber;
+                listTourChiPhiChiTiet = tourChiPhiChiTiets.Where(s => s.ChiPhi > GiaTu && s.ChiPhi <= GiaDen);
+                ViewBag.TotalPages = Math.Ceiling(listTourChiPhiChiTiet.Count() / 5.0);
+                return View(listTourChiPhiChiTiet.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+
+
+            return View(tourChiPhiChiTiets.Skip((PageNumber - 1) * 5).Take(5).ToList());
+        }
         // GET: TourChiPhiChiTiets/Details/5
         public async Task<IActionResult> Details(int? id)
         {

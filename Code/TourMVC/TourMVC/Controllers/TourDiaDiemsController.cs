@@ -19,20 +19,19 @@ namespace TourMVC.Controllers
         }
 
         // GET: TourDiaDiems
-        public async Task<IActionResult> Index(int PageNumber = 1)
+        public IActionResult Index(int PageNumber = 1)
         {
             
             var tourDiaDiems = (from l in _context.TourDiaDiem
                          select l).OrderBy(x => x.DiaDiemThanhPho);
             ViewBag.TotalPages = Math.Ceiling(tourDiaDiems.Count() / 5.0);
-            Console.WriteLine("so dòng"+tourDiaDiems.Count());
             var listTourDiaDiem = tourDiaDiems.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourDiaDiem);
         }
         [HttpGet]
-        public async Task<IActionResult> Index(string classify,string searchString, int PageNumber = 1)
+        public IActionResult Index(string classify,string searchString, int PageNumber = 1)
         {
-            Console.WriteLine("oke");
+           
             IEnumerable<TourDiaDiem> listTourDiaDiem;
             var tourDiaDiems = (from l in _context.TourDiaDiem
                                 select l).OrderBy(x => x.DiaDiemThanhPho);
