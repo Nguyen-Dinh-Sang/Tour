@@ -12,6 +12,7 @@ namespace TourMVC.Controllers
     public class ToursController : Controller
     {
         private readonly TourDBContext context;
+        private static int? tourId;
 
         public ToursController()
         {
@@ -21,9 +22,9 @@ namespace TourMVC.Controllers
         // GET: Tours
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = context.Tour.Include(t => t.Loai);
-            ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
-            var listTour = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            var tours = context.Tour.Include(t => t.Loai).Include(t2 => t2.GiaTourHienTai.Gia);
+            ViewBag.TotalPages = Math.Ceiling(tours.Count() / 5.0);
+            var listTour = tours.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTour);
         }
         [HttpGet]
@@ -32,7 +33,7 @@ namespace TourMVC.Controllers
 
             IEnumerable<Tour> listTour;
             var tour = (from l in context.Tour
-                             select l).Include(t => t.Loai).OrderBy(x => x.TourTen);
+                             select l).Include(t => t.Loai).Include(t2 => t2.GiaTourHienTai.Gia).OrderBy(x => x.TourTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tour.Count() / 5.0);
             if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên tour") == true)
@@ -77,24 +78,24 @@ namespace TourMVC.Controllers
             var tour = await context.Tour
                 .Include(t => t.Loai)
                 .FirstOrDefaultAsync(m => m.TourId == id);
+            context.Entry(tour).Collection(t => t.TourChiTiet).Query().Include(tct => tct.DiaDiem).OrderBy(tct => tct.ChiTietThuTu).Load();
+           // context.Entry(tour).Reference(t => t.TourChiTiet.Select(tct => tct.DiaDiem)).Load();
             if (tour == null)
             {
                 return NotFound();
             }
-
+            tourId = id;
             return View(tour);
         }
 
         // GET: Tours/Create
         public IActionResult Create()
         {
-            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa");
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiTen");
             return View();
         }
 
         // POST: Tours/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TourId,TourTen,TourMoTa,LoaiId,NgayTao")] Tour tour)
@@ -105,7 +106,7 @@ namespace TourMVC.Controllers
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiTen", tour.LoaiId);
             return View(tour);
         }
 
@@ -122,13 +123,11 @@ namespace TourMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiTen", tour.LoaiId);
             return View(tour);
         }
 
         // POST: Tours/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TourId,TourTen,TourMoTa,LoaiId,NgayTao")] Tour tour)
@@ -158,7 +157,7 @@ namespace TourMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiMoTa", tour.LoaiId);
+            ViewData["LoaiId"] = new SelectList(context.TourLoai, "LoaiId", "LoaiTen", tour.LoaiId);
             return View(tour);
         }
 
@@ -195,6 +194,72 @@ namespace TourMVC.Controllers
         private bool TourExists(int id)
         {
             return context.Tour.Any(e => e.TourId == id);
+        }
+
+        // GET: Tour/EditTourChiTiet/5
+        public async Task<IActionResult> EditTourChiTiet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tourChiTiet = await context.TourChiTiet.FindAsync(id);
+            if (tourChiTiet == null)
+            {
+                return NotFound();
+            }
+           
+            var diaDiem = await context.TourDiaDiem.FindAsync(tourChiTiet.DiaDiemId);
+            var tour = await context.Tour.FindAsync(tourChiTiet.TourId);
+            ViewData["DiaDiemId"] = diaDiem.DiaDiemTen;
+            ViewData["TourId"] = tour.TourTen;
+            return View(tourChiTiet);
+        }
+
+        // POST: Tour/EditTourChiTiet/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditTourChiTiet(int id, [Bind("ChiTietId,ChiTietThuTu,NgayTao")] TourChiTiet tourChiTiet)
+        {
+            if (id != tourChiTiet.ChiTietId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var tct = await context.TourChiTiet.FindAsync(id);
+                    tct.ChiTietThuTu = tourChiTiet.ChiTietThuTu;
+                    context.Update(tct);
+                    await context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TourChiTietExists(tourChiTiet.ChiTietId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Details), new { id = tourId });
+            }
+
+            var diaDiem = await context.TourDiaDiem.FindAsync(tourChiTiet.DiaDiemId);
+            var tour = await context.Tour.FindAsync(tourChiTiet.TourId);
+            ViewData["DiaDiemId"] = diaDiem.DiaDiemTen;
+            ViewData["TourId"] = tour.TourTen; 
+            return View(tourChiTiet);
+        }
+
+        private bool TourChiTietExists(int id)
+        {
+            return context.TourChiTiet.Any(e => e.ChiTietId == id);
         }
     }
 }

@@ -1,0 +1,48 @@
+﻿@model TourMVC.Models.TourChiTiet
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chỉnh Sửa Thứ Tự</h1>
+
+<h4>Địa Điểm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditTourChiTiet">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ChiTietId" />
+            <div class="form-group">
+                <label class="control-label">Tour</label>
+                <input class="form-control" value="@ViewBag.TourId" readonly />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Địa Điểm</label>
+                <input class="form-control" value="@ViewBag.DiaDiemId" readonly/>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChiTietThuTu" class="control-label"></label>
+                <input asp-for="ChiTietThuTu" class="form-control" />
+                <span asp-validation-for="ChiTietThuTu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgayTao" class="control-label"></label>
+                <input asp-for="NgayTao" class="form-control" readonly/>
+                <span asp-validation-for="NgayTao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Lưu Lại" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Trở Về</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -11,18 +11,18 @@ namespace TourMVC.Controllers
 {
     public class TourDiaDiemsController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public TourDiaDiemsController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: TourDiaDiems
         public IActionResult Index(int PageNumber = 1)
         {
             
-            var tourDiaDiems = (from l in _context.TourDiaDiem
+            var tourDiaDiems = (from l in context.TourDiaDiem
                          select l).OrderBy(x => x.DiaDiemThanhPho);
             ViewBag.TotalPages = Math.Ceiling(tourDiaDiems.Count() / 5.0);
             var listTourDiaDiem = tourDiaDiems.Skip((PageNumber - 1) * 5).Take(5).ToList();
@@ -33,7 +33,7 @@ namespace TourMVC.Controllers
         {
            
             IEnumerable<TourDiaDiem> listTourDiaDiem;
-            var tourDiaDiems = (from l in _context.TourDiaDiem
+            var tourDiaDiems = (from l in context.TourDiaDiem
                                 select l).OrderBy(x => x.DiaDiemThanhPho);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourDiaDiems.Count() / 5.0);
@@ -74,7 +74,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourDiaDiem = await _context.TourDiaDiem
+            var tourDiaDiem = await context.TourDiaDiem
                 .FirstOrDefaultAsync(m => m.DiaDiemId == id);
             if (tourDiaDiem == null)
             {
@@ -91,16 +91,14 @@ namespace TourMVC.Controllers
         }
 
         // POST: TourDiaDiems/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DiaDiemId,DiaDiemThanhPho,DiaDiemTen,DiaDiemMoTa,NgayTao")] TourDiaDiem tourDiaDiem)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tourDiaDiem);
-                await _context.SaveChangesAsync();
+                context.Add(tourDiaDiem);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tourDiaDiem);
@@ -114,7 +112,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourDiaDiem = await _context.TourDiaDiem.FindAsync(id);
+            var tourDiaDiem = await context.TourDiaDiem.FindAsync(id);
             if (tourDiaDiem == null)
             {
                 return NotFound();
@@ -123,8 +121,6 @@ namespace TourMVC.Controllers
         }
 
         // POST: TourDiaDiems/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DiaDiemId,DiaDiemThanhPho,DiaDiemTen,DiaDiemMoTa,NgayTao")] TourDiaDiem tourDiaDiem)
@@ -138,8 +134,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tourDiaDiem);
-                    await _context.SaveChangesAsync();
+                    context.Update(tourDiaDiem);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -165,7 +161,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourDiaDiem = await _context.TourDiaDiem
+            var tourDiaDiem = await context.TourDiaDiem
                 .FirstOrDefaultAsync(m => m.DiaDiemId == id);
             if (tourDiaDiem == null)
             {
@@ -180,15 +176,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tourDiaDiem = await _context.TourDiaDiem.FindAsync(id);
-            _context.TourDiaDiem.Remove(tourDiaDiem);
-            await _context.SaveChangesAsync();
+            var tourDiaDiem = await context.TourDiaDiem.FindAsync(id);
+            context.TourDiaDiem.Remove(tourDiaDiem);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourDiaDiemExists(int id)
         {
-            return _context.TourDiaDiem.Any(e => e.DiaDiemId == id);
+            return context.TourDiaDiem.Any(e => e.DiaDiemId == id);
         }
     }
 }
