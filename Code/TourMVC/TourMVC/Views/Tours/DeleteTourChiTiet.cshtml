@@ -38,9 +38,9 @@
         </dd class>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="DeleteTourChiTiet">
         <input type="hidden" asp-for="ChiTietId" />
         <input type="submit" value="Xóa" class="btn btn-danger" /> |
-        <a asp-action="Index">Trở Lại</a>
+        <a asp-action="Details" asp-route-id="@Model.TourId">Trở Lại</a>
     </form>
 </div>

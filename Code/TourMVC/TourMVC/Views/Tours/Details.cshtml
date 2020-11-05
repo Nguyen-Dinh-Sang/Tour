@@ -60,27 +60,28 @@
                 <tbody>
                     @foreach (var item in Model.TourChiTiet)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemThanhPho)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemTen)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NgayTao)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ChiTietThuTu)
-                        </td>
-                        <td>
-                            <a asp-action="EditTourChiTiet" asp-route-id="@item.ChiTietId">Chỉnh Sửa Thứ Tự</a> |
-                            <a asp-action="DeleteTourChiTiet" asp-route-id="@item.ChiTietId">Xóa</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemThanhPho)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemTen)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NgayTao)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ChiTietThuTu)
+                            </td>
+                            <td>
+                                <a asp-action="EditTourChiTiet" asp-route-id="@item.ChiTietId">Chỉnh Sửa Thứ Tự</a> |
+                                <a asp-action="DeleteTourChiTiet" asp-route-id="@item.ChiTietId">Xóa</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
+            <a asp-action="CreateTourChiTiet" asp-route-id="@Model.TourId">Thêm Địa Điểm</a>
         </dd>
     </dl>
 </div>

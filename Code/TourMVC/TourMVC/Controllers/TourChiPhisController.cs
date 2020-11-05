@@ -11,17 +11,17 @@ namespace TourMVC.Controllers
 {
     public class TourChiPhisController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public TourChiPhisController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: TourChiPhis
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.TourChiPhi.Include(t => t.Doan).OrderBy(x=>x.Doan.DoanTen);
+            var tourDBContext = context.TourChiPhi.Include(t => t.Doan).OrderBy(x=>x.Doan.DoanTen);
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             var listTourChiPhi = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourChiPhi);
@@ -31,7 +31,7 @@ namespace TourMVC.Controllers
         {
 
             IEnumerable<TourChiPhi> listTourChiPhi;
-            var tourChiPhis = (from l in _context.TourChiPhi
+            var tourChiPhis = (from l in context.TourChiPhi
                                    select l).Include(t => t.Doan).OrderBy(x => x.Doan.DoanTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourChiPhis.Count() / 5.0);
@@ -67,7 +67,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourChiPhi = await _context.TourChiPhi
+            var tourChiPhi = await context.TourChiPhi
                 .Include(t => t.Doan)
                 .FirstOrDefaultAsync(m => m.ChiPhiId == id);
             if (tourChiPhi == null)
@@ -81,7 +81,7 @@ namespace TourMVC.Controllers
         // GET: TourChiPhis/Create
         public IActionResult Create()
         {
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet");
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet");
             return View();
         }
 
@@ -94,11 +94,11 @@ namespace TourMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tourChiPhi);
-                await _context.SaveChangesAsync();
+                context.Add(tourChiPhi);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet", tourChiPhi.DoanId);
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet", tourChiPhi.DoanId);
             return View(tourChiPhi);
         }
 
@@ -110,12 +110,12 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourChiPhi = await _context.TourChiPhi.FindAsync(id);
+            var tourChiPhi = await context.TourChiPhi.FindAsync(id);
             if (tourChiPhi == null)
             {
                 return NotFound();
             }
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet", tourChiPhi.DoanId);
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet", tourChiPhi.DoanId);
             return View(tourChiPhi);
         }
 
@@ -135,8 +135,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tourChiPhi);
-                    await _context.SaveChangesAsync();
+                    context.Update(tourChiPhi);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,7 +151,7 @@ namespace TourMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet", tourChiPhi.DoanId);
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet", tourChiPhi.DoanId);
             return View(tourChiPhi);
         }
 
@@ -163,7 +163,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourChiPhi = await _context.TourChiPhi
+            var tourChiPhi = await context.TourChiPhi
                 .Include(t => t.Doan)
                 .FirstOrDefaultAsync(m => m.ChiPhiId == id);
             if (tourChiPhi == null)
@@ -179,15 +179,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tourChiPhi = await _context.TourChiPhi.FindAsync(id);
-            _context.TourChiPhi.Remove(tourChiPhi);
-            await _context.SaveChangesAsync();
+            var tourChiPhi = await context.TourChiPhi.FindAsync(id);
+            context.TourChiPhi.Remove(tourChiPhi);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourChiPhiExists(int id)
         {
-            return _context.TourChiPhi.Any(e => e.ChiPhiId == id);
+            return context.TourChiPhi.Any(e => e.ChiPhiId == id);
         }
     }
 }

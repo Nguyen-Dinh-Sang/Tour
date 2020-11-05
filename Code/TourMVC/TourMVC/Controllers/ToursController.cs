@@ -261,5 +261,73 @@ namespace TourMVC.Controllers
         {
             return context.TourChiTiet.Any(e => e.ChiTietId == id);
         }
+
+        // GET: Tours/DeleteChiTiet/5
+        public async Task<IActionResult> DeleteTourChiTiet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tourChiTiet = await context.TourChiTiet
+                .Include(t => t.DiaDiem)
+                .Include(t => t.Tour)
+                .FirstOrDefaultAsync(m => m.ChiTietId == id);
+            if (tourChiTiet == null)
+            {
+                return NotFound();
+            }
+
+            return View(tourChiTiet);
+        }
+
+        // POST: Tours/DeleteChiTiet/5
+        [HttpPost, ActionName("DeleteTourChiTiet")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTourChiTietConfirmed(int id)
+        {
+            var tourChiTiet = await context.TourChiTiet.FindAsync(id);
+            context.TourChiTiet.Remove(tourChiTiet);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { id = tourChiTiet.TourId });
+        }
+
+        // GET: Tours/CreateChiTiet
+        public IActionResult CreateTourChiTiet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tour = context.Tour.Find(id);
+            
+            if (tour == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemTen");
+            ViewData["TourId"] = tour.TourTen;
+
+            return View(new TourChiTiet());
+        }
+
+        // POST: Tours/CreateChiTiet
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTourChiTiet([Bind("ChiTietId,TourId,DiaDiemId,ChiTietThuTu,NgayTao")] TourChiTiet tourChiTiet)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Add(tourChiTiet);
+                await context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemTen", tourChiTiet.DiaDiemId);
+            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen", tourChiTiet.TourId);
+            return View(tourChiTiet);
+        }
     }
 }
