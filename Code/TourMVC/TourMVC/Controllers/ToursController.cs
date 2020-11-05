@@ -294,7 +294,7 @@ namespace TourMVC.Controllers
         }
 
         // GET: Tours/CreateChiTiet
-        public IActionResult CreateTourChiTiet(int? id)
+        public IActionResult CreateTourChiTiet(int id)
         {
             if (id == null)
             {
@@ -311,22 +311,28 @@ namespace TourMVC.Controllers
             ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemTen");
             ViewData["TourId"] = tour.TourTen;
 
-            return View(new TourChiTiet());
+            TourChiTiet tourChiTiet = new TourChiTiet();
+            tourChiTiet.TourId = id;
+            return View(tourChiTiet);
         }
 
         // POST: Tours/CreateChiTiet
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTourChiTiet([Bind("ChiTietId,TourId,DiaDiemId,ChiTietThuTu,NgayTao")] TourChiTiet tourChiTiet)
+        public async Task<IActionResult> CreateTourChiTiet([Bind("ChiTietId,DiaDiemId,ChiTietThuTu,NgayTao")] TourChiTiet tourChiTiet)
         {
             if (ModelState.IsValid)
             {
+                tourChiTiet.TourId = (int) tourId;
                 context.Add(tourChiTiet);
                 await context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = tourChiTiet.TourId });
             }
             ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemTen", tourChiTiet.DiaDiemId);
-            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen", tourChiTiet.TourId);
+            var tour = context.Tour.Find(tourId);
+            ViewData["TourId"] = tour.TourTen;
+
+            tourChiTiet.TourId = (int) tourId;
             return View(tourChiTiet);
         }
     }
