@@ -102,8 +102,8 @@ namespace TourMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemMoTa", tourChiTiet.DiaDiemId);
-            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourMoTa", tourChiTiet.TourId);
+            ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemTen", tourChiTiet.DiaDiemId);
+            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen", tourChiTiet.TourId);
             return View(tourChiTiet);
         }
 
@@ -137,8 +137,8 @@ namespace TourMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemMoTa", tourChiTiet.DiaDiemId);
-            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourMoTa", tourChiTiet.TourId);
+            ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemTen", tourChiTiet.DiaDiemId);
+            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen", tourChiTiet.TourId);
             return View(tourChiTiet);
         }
 
