@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Danh sách chi tiết tour</h1>
+<h1>Danh Sách Chi Tiết Tour</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm Chi Tiết Tour Mới</a>
 </p>
 @using (Html.BeginForm("Index", "TourChiTiets", FormMethod.Get))
 {
@@ -27,13 +27,13 @@
                 @Html.DisplayNameFor(model => model.ChiTietThuTu)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NgayTao)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DiaDiem)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Tour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayTao)
             </th>
             <th></th>
         </tr>
@@ -41,25 +41,25 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ChiTietThuTu)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NgayTao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemTen)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tour.TourMoTa)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ChiTietId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ChiTietId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ChiTietId">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChiTietThuTu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tour.TourTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayTao)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ChiTietId">Chỉnh Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.ChiTietId">Chi Tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.ChiTietId">Xóa</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
