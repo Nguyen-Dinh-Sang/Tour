@@ -11,17 +11,17 @@ namespace TourMVC.Controllers
 {
     public class GiaTourHienTaisController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public GiaTourHienTaisController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: GiaTourHienTais
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext =_context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour);
+            var tourDBContext =context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour);
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             var listTourGiaHienTai = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourGiaHienTai);
@@ -32,7 +32,7 @@ namespace TourMVC.Controllers
 
             IEnumerable<GiaTourHienTai> listTourGiaHienTai;
           
-            var tourDBContext = _context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour).OrderBy(x => x.Tour.TourTen);
+            var tourDBContext = context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour).OrderBy(x => x.Tour.TourTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             if (GiaTourDen!=0)
@@ -54,7 +54,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var giaTourHienTai = await _context.GiaTourHienTai
+            var giaTourHienTai = await context.GiaTourHienTai
                 .Include(g => g.Gia)
                 .Include(g => g.Tour)
                 .FirstOrDefaultAsync(m => m.TourId == id);
@@ -69,26 +69,24 @@ namespace TourMVC.Controllers
         // GET: GiaTourHienTais/Create
         public IActionResult Create()
         {
-            ViewData["GiaId"] = new SelectList(_context.TourGia, "GiaId", "GiaId");
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa");
+            ViewData["GiaId"] = new SelectList(context.TourGia, "GiaId", "GiaTuNgay");
+            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen");
             return View();
         }
 
         // POST: GiaTourHienTais/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TourId,GiaId,NgayTao")] GiaTourHienTai giaTourHienTai)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(giaTourHienTai);
-                await _context.SaveChangesAsync();
+                context.Add(giaTourHienTai);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiaId"] = new SelectList(_context.TourGia, "GiaId", "GiaId", giaTourHienTai.GiaId);
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa", giaTourHienTai.TourId);
+            ViewData["GiaId"] = new SelectList(context.TourGia, "GiaId", "GiaTuNgay", giaTourHienTai.GiaId);
+            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen", giaTourHienTai.TourId);
             return View(giaTourHienTai);
         }
 
@@ -100,23 +98,24 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var giaTourHienTai = await _context.GiaTourHienTai.FindAsync(id);
+            var giaTourHienTai = await context.GiaTourHienTai.FindAsync(id);
             if (giaTourHienTai == null)
             {
                 return NotFound();
             }
-            ViewData["GiaId"] = new SelectList(_context.TourGia, "GiaId", "GiaId", giaTourHienTai.GiaId);
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa", giaTourHienTai.TourId);
+            ViewData["GiaId"] = new SelectList(context.TourGia, "GiaId", "GiaTuNgay", giaTourHienTai.GiaId);
+            var tour = await context.Tour.FindAsync(giaTourHienTai.TourId);
+            ViewData["TourId"] = tour.TourTen;
             return View(giaTourHienTai);
         }
 
         // POST: GiaTourHienTais/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TourId,GiaId,NgayTao")] GiaTourHienTai giaTourHienTai)
+        public async Task<IActionResult> Edit(int id, [Bind("GiaId,NgayTao")] GiaTourHienTai giaTourHienTai)
         {
+            giaTourHienTai.TourId = id;
+
             if (id != giaTourHienTai.TourId)
             {
                 return NotFound();
@@ -126,8 +125,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(giaTourHienTai);
-                    await _context.SaveChangesAsync();
+                    context.Update(giaTourHienTai);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -142,8 +141,9 @@ namespace TourMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiaId"] = new SelectList(_context.TourGia, "GiaId", "GiaId", giaTourHienTai.GiaId);
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa", giaTourHienTai.TourId);
+            ViewData["GiaId"] = new SelectList(context.TourGia, "GiaId", "GiaTuNgay", giaTourHienTai.GiaId);
+            var tour = await context.Tour.FindAsync(giaTourHienTai.TourId);
+            ViewData["TourId"] = tour.TourTen;
             return View(giaTourHienTai);
         }
 
@@ -155,7 +155,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var giaTourHienTai = await _context.GiaTourHienTai
+            var giaTourHienTai = await context.GiaTourHienTai
                 .Include(g => g.Gia)
                 .Include(g => g.Tour)
                 .FirstOrDefaultAsync(m => m.TourId == id);
@@ -172,15 +172,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var giaTourHienTai = await _context.GiaTourHienTai.FindAsync(id);
-            _context.GiaTourHienTai.Remove(giaTourHienTai);
-            await _context.SaveChangesAsync();
+            var giaTourHienTai = await context.GiaTourHienTai.FindAsync(id);
+            context.GiaTourHienTai.Remove(giaTourHienTai);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GiaTourHienTaiExists(int id)
         {
-            return _context.GiaTourHienTai.Any(e => e.TourId == id);
+            return context.GiaTourHienTai.Any(e => e.TourId == id);
         }
     }
 }

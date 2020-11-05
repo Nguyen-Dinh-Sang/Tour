@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Danh sách giá tour hiện tại</h1>
+<h1>Danh Sách Giá Tour Hiện Tại</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm Giá Cho Tour Mới</a>
 </p>
 @using (Html.BeginForm("Index", "GiaTourHienTais", FormMethod.Get))
 {
@@ -35,13 +35,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NgayTao)
+                @Html.DisplayNameFor(model => model.Tour)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Gia)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tour)
+                @Html.DisplayNameFor(model => model.NgayTao)
             </th>
             <th></th>
         </tr>
@@ -49,22 +49,21 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NgayTao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Gia.GiaSoTien)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tour.TourTen)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.TourId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.TourId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.TourId">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tour.TourTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gia.GiaSoTien)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayTao)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TourId">Chỉnh Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.TourId">Chi Tiết</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
