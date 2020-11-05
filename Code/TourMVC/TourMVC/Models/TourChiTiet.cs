@@ -17,7 +17,9 @@ namespace TourMVC.Models
         [DataType(DataType.Date)]
         public DateTime? NgayTao { get; set; }
 
+        [Display(Name = "Địa Điểm")]
         public virtual TourDiaDiem DiaDiem { get; set; }
+        [Display(Name = "Tour")]
         public virtual Tour Tour { get; set; }
     }
 }
