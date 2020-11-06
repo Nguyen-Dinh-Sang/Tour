@@ -81,7 +81,7 @@ namespace TourMVC.Controllers
         // GET: TourGias/Create
         public IActionResult Create()
         {
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa");
+            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourTen");
             return View();
         }
 
@@ -98,7 +98,7 @@ namespace TourMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa", tourGia.TourId);
+            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourTen", tourGia.TourId);
             return View(tourGia);
         }
 

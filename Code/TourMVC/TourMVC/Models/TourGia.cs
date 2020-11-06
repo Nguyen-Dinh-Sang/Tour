@@ -12,7 +12,9 @@ namespace TourMVC.Models
         }
 
         public int GiaId { get; set; }
+        [Display(Name = "Số Tiền")]
         public decimal GiaSoTien { get; set; }
+        [Display(Name = "Tour")]
         public int TourId { get; set; }
         [Display(Name = "Giá Từ Ngày")]
         [DataType(DataType.Date)]

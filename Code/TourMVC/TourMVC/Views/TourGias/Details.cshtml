@@ -5,45 +5,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>Chi Tiết</h1>
 
 <div>
-    <h4>TourGia</h4>
+    <h4>Giá Tour</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GiaSoTien)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GiaSoTien)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GiaTuNgay)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GiaTuNgay)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GiaDenNgay)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GiaDenNgay)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NgayTao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NgayTao)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Tour)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tour.TourMoTa)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tour.TourTen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GiaSoTien)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GiaSoTien)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GiaTuNgay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GiaTuNgay)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GiaDenNgay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GiaDenNgay)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NgayTao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NgayTao)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.GiaId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.GiaId">Chỉnh Sửa</a> |
+    <a asp-action="Index">Trở Về</a>
 </div>
