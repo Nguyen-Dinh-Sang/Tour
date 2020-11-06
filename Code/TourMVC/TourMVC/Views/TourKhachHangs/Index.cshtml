@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Danh sách khách hàng</h1>
+<h1>Danh Sách Khách Hàng</h1>
 
 @using (Html.BeginForm("Index", "TourKhachHangs", FormMethod.Get))
 {
@@ -21,7 +21,7 @@
     </p>
 }
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm Khách Hàng Mới</a>
 </p>
 
 <table class="table">
@@ -41,9 +41,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.KhachHangChungMinhNhanDan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayTao)
             </th>
             <th></th>
         </tr>
@@ -68,12 +65,9 @@
                     @Html.DisplayFor(modelItem => item.KhachHangChungMinhNhanDan)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NgayTao)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.KhachHangId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.KhachHangId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.KhachHangId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.KhachHangId">Chỉnh Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.KhachHangId">Chi Tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.KhachHangId">Xóa</a>
                 </td>
             </tr>
         }
