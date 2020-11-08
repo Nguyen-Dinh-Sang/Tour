@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TourMVC.Models
 {
@@ -13,12 +14,22 @@ namespace TourMVC.Models
         }
 
         public int DoanId { get; set; }
+        [Display(Name = "Tour")]
         public int TourId { get; set; }
+        [Display(Name = "Tên Đoàn")]
         public string DoanTen { get; set; }
+        [Display(Name = "Ngày Đi")]
+        [DataType(DataType.Date)]
         public DateTime DoanNgayDi { get; set; }
+        [Display(Name = "Ngày Về")]
+        [DataType(DataType.Date)]
         public DateTime DoanNgayVe { get; set; }
+        [Display(Name = "Chi Tiết Đoàn")]
         public string DoanChiTiet { get; set; }
+        [Display(Name = "Giá Tour")]
         public decimal DoanGiaTour { get; set; }
+        [Display(Name = "Ngày Tạo")]
+        [DataType(DataType.Date)]
         public DateTime? NgayTao { get; set; }
 
         public virtual Tour Tour { get; set; }

@@ -11,17 +11,17 @@ namespace TourMVC.Controllers
 {
     public class TourKhachHangsController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public TourKhachHangsController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: TourKhachHangs
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourKhachHangs = (from l in _context.TourKhachHang
+            var tourKhachHangs = (from l in context.TourKhachHang
                                 select l).OrderBy(x => x.KhachHangTen);
             ViewBag.TotalPages = Math.Ceiling(tourKhachHangs.Count() / 5.0);
             var listTourKhachHang = tourKhachHangs.Skip((PageNumber - 1) * 5).Take(5).ToList();
@@ -32,7 +32,7 @@ namespace TourMVC.Controllers
         {
 
             IEnumerable<TourKhachHang> listTourKhachHang;
-            var tourKhachHangs = (from l in _context.TourKhachHang
+            var tourKhachHangs = (from l in context.TourKhachHang
                                 select l).OrderBy(x => x.KhachHangTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourKhachHangs.Count() / 5.0);
@@ -82,7 +82,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourKhachHang = await _context.TourKhachHang
+            var tourKhachHang = await context.TourKhachHang
                 .FirstOrDefaultAsync(m => m.KhachHangId == id);
             if (tourKhachHang == null)
             {
@@ -99,16 +99,14 @@ namespace TourMVC.Controllers
         }
 
         // POST: TourKhachHangs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("KhachHangId,KhachHangTen,KhachHangSoDienThoai,KhachHangEmail,KhachHangNgaySinh,KhachHangChungMinhNhanDan,NgayTao")] TourKhachHang tourKhachHang)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tourKhachHang);
-                await _context.SaveChangesAsync();
+                context.Add(tourKhachHang);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tourKhachHang);
@@ -122,7 +120,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourKhachHang = await _context.TourKhachHang.FindAsync(id);
+            var tourKhachHang = await context.TourKhachHang.FindAsync(id);
             if (tourKhachHang == null)
             {
                 return NotFound();
@@ -131,8 +129,6 @@ namespace TourMVC.Controllers
         }
 
         // POST: TourKhachHangs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("KhachHangId,KhachHangTen,KhachHangSoDienThoai,KhachHangEmail,KhachHangNgaySinh,KhachHangChungMinhNhanDan,NgayTao")] TourKhachHang tourKhachHang)
@@ -146,8 +142,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tourKhachHang);
-                    await _context.SaveChangesAsync();
+                    context.Update(tourKhachHang);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -173,7 +169,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourKhachHang = await _context.TourKhachHang
+            var tourKhachHang = await context.TourKhachHang
                 .FirstOrDefaultAsync(m => m.KhachHangId == id);
             if (tourKhachHang == null)
             {
@@ -188,15 +184,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tourKhachHang = await _context.TourKhachHang.FindAsync(id);
-            _context.TourKhachHang.Remove(tourKhachHang);
-            await _context.SaveChangesAsync();
+            var tourKhachHang = await context.TourKhachHang.FindAsync(id);
+            context.TourKhachHang.Remove(tourKhachHang);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourKhachHangExists(int id)
         {
-            return _context.TourKhachHang.Any(e => e.KhachHangId == id);
+            return context.TourKhachHang.Any(e => e.KhachHangId == id);
         }
     }
 }
