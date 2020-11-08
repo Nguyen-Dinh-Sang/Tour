@@ -240,5 +240,55 @@ namespace TourMVC.Controllers
             ViewData["KhachHangId"] = new SelectList(context.TourKhachHang, "KhachHangId", "KhachHangTen", doanKhachHang.KhachHangId);
             return View(doanKhachHang);
         }
+
+
+        public async Task<IActionResult> DetailsKhachHang(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tourKhachHang = await context.TourKhachHang
+                .FirstOrDefaultAsync(m => m.KhachHangId == id);
+            if (tourKhachHang == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doanId;
+            return View(tourKhachHang);
+        }
+
+        // GET: TourDoans/DeleteKhachHang/5
+        public async Task<IActionResult> DeleteKhachHang(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var doanKhachHang = await context.DoanKhachHang
+                .Include(d => d.Doan)
+                .Include(d => d.KhachHang)
+                .FirstOrDefaultAsync(m => m.DoanKhachHangId == id);
+            if (doanKhachHang == null)
+            {
+                return NotFound();
+            }
+
+            return View(doanKhachHang);
+        }
+
+        // POST:  TourDoans/DeleteKhachHang/5
+        [HttpPost, ActionName("DeleteKhachHang")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteKhachHang(int id)
+        {
+            var doanKhachHang = await context.DoanKhachHang.FindAsync(id);
+            context.DoanKhachHang.Remove(doanKhachHang);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { id = doanKhachHang.DoanId });
+        }
     }
 }
