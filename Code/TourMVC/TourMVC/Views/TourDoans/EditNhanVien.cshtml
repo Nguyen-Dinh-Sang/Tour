@@ -5,24 +5,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Chỉnh Sửa</h1>
 
-<h4>DoanNhanVien</h4>
+<h4>Nhân Viên</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="EditNhanVien">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="DoanNhanVienId" />
             <div class="form-group">
-                <label asp-for="NhanVienId" class="control-label"></label>
-                <select asp-for="NhanVienId" class="form-control" asp-items="ViewBag.NhanVienId"></select>
-                <span asp-validation-for="NhanVienId" class="text-danger"></span>
+                <label class="control-label">Đoàn</label>
+                <input class="form-control" value="@ViewBag.DoanId" readonly />
             </div>
             <div class="form-group">
-                <label asp-for="DoanId" class="control-label"></label>
-                <select asp-for="DoanId" class="form-control" asp-items="ViewBag.DoanId"></select>
-                <span asp-validation-for="DoanId" class="text-danger"></span>
+                <label class="control-label">Nhân Viên</label>
+                <input class="form-control" value="@ViewBag.NhanVienId" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="NhanVienNhiemVu" class="control-label"></label>
@@ -31,18 +29,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="NgayTao" class="control-label"></label>
-                <input asp-for="NgayTao" class="form-control" />
+                <input asp-for="NgayTao" class="form-control" readonly />
                 <span asp-validation-for="NgayTao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Lưu Lại" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Details" asp-route-id="@Model.DoanId">Trở Lại</a>
 </div>
 
 @section Scripts {

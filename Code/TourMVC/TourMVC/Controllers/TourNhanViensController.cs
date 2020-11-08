@@ -11,17 +11,17 @@ namespace TourMVC.Controllers
 {
     public class TourNhanViensController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public TourNhanViensController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: TourNhanViens
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourNhanViens = (from l in _context.TourNhanVien
+            var tourNhanViens = (from l in context.TourNhanVien
                                   select l).OrderBy(x => x.NhanVienTen);
             ViewBag.TotalPages = Math.Ceiling(tourNhanViens.Count() / 5.0);
             var listTourNhanVien = tourNhanViens.Skip((PageNumber - 1) * 5).Take(5).ToList();
@@ -32,7 +32,7 @@ namespace TourMVC.Controllers
         {
 
             IEnumerable<TourNhanVien> listTourNhanVien;
-            var tourNhanViens = (from l in _context.TourNhanVien
+            var tourNhanViens = (from l in context.TourNhanVien
                                   select l).OrderBy(x => x.NhanVienTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourNhanViens.Count() / 5.0);
@@ -73,7 +73,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourNhanVien = await _context.TourNhanVien
+            var tourNhanVien = await context.TourNhanVien
                 .FirstOrDefaultAsync(m => m.NhanVienId == id);
             if (tourNhanVien == null)
             {
@@ -98,8 +98,8 @@ namespace TourMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tourNhanVien);
-                await _context.SaveChangesAsync();
+                context.Add(tourNhanVien);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tourNhanVien);
@@ -113,7 +113,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourNhanVien = await _context.TourNhanVien.FindAsync(id);
+            var tourNhanVien = await context.TourNhanVien.FindAsync(id);
             if (tourNhanVien == null)
             {
                 return NotFound();
@@ -137,8 +137,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tourNhanVien);
-                    await _context.SaveChangesAsync();
+                    context.Update(tourNhanVien);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -164,7 +164,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourNhanVien = await _context.TourNhanVien
+            var tourNhanVien = await context.TourNhanVien
                 .FirstOrDefaultAsync(m => m.NhanVienId == id);
             if (tourNhanVien == null)
             {
@@ -179,15 +179,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tourNhanVien = await _context.TourNhanVien.FindAsync(id);
-            _context.TourNhanVien.Remove(tourNhanVien);
-            await _context.SaveChangesAsync();
+            var tourNhanVien = await context.TourNhanVien.FindAsync(id);
+            context.TourNhanVien.Remove(tourNhanVien);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourNhanVienExists(int id)
         {
-            return _context.TourNhanVien.Any(e => e.NhanVienId == id);
+            return context.TourNhanVien.Any(e => e.NhanVienId == id);
         }
     }
 }
