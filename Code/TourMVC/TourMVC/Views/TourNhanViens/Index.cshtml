@@ -1,0 +1,88 @@
+﻿@model IEnumerable<TourMVC.Models.TourNhanVien>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Danh sách nhân viên</h1>
+@using (Html.BeginForm("Index", "TourNhanViens", FormMethod.Get))
+{
+    <p>
+        Loại:
+        <select id="classify" name="classify">
+            <option>Tên nhân viên</option>
+            <option>Số điện thoại</option>
+            <option>Email</option>
+        </select>
+        Nội dung: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
+    </p>
+}
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVienTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVienSoDienThoai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVienEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVienNgaySinh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayTao)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NhanVienTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NhanVienSoDienThoai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NhanVienEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NhanVienNgaySinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.NhanVienId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.NhanVienId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.NhanVienId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    double totalPages = ViewBag.TotalPages;
+    int PageNumber = ViewBag.PageNumber;
+    <div class="pagination" style="float:left">
+        @if (PageNumber > 1)
+        {
+            @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber - 1 })
+        }
+        <label>@PageNumber</label>
+        @if (PageNumber != totalPages)
+        {
+            @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber + 1 })
+        }
+    </div>
+
+}
