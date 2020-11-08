@@ -69,7 +69,7 @@ namespace TourMVC.Controllers
 
             var tourLoai = await context.TourLoai
                 .FirstOrDefaultAsync(m => m.LoaiId == id);
-            context.Entry(tourLoai).Collection(tl => tl.Tour).Load();
+            context.Entry(tourLoai).Collection(tl => tl.Tour).Query().OrderBy(t => t.NgayTao).Load();
             if (tourLoai == null)
             {
                 return NotFound();

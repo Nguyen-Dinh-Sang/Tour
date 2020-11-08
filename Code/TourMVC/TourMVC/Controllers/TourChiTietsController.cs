@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TourMVC.Models;
-
+//Quản lý tour - địa điểm vd: xem các tour đi địa điểm
 namespace TourMVC.Controllers
 {
     public class TourChiTietsController : Controller
