@@ -147,14 +147,14 @@
                         </td>
                         <td>
                             <a asp-action="EditNhanVien" asp-route-id="@item.DoanNhanVienId">Chỉnh Sửa Nhiệm Vụ</a> |
-                            <a asp-action="DetailNhanVien" asp-route-id="@item.NhanVien.NhanVienId">Chi Tiết</a> |
+                            <a asp-action="DetailsNhanVien" asp-route-id="@item.NhanVien.NhanVienId">Chi Tiết</a> |
                             <a asp-action="DeleteNhanVien" asp-route-id="@item.DoanNhanVienId">Xóa</a>
                         </td>
                     </tr>
                     }
                 </tbody>
             </table>
-            <a asp-action="" asp-route-id="">Thêm Nhân Viên</a>
+            <a asp-action="AddNhanVien" asp-route-id="@Model.DoanId">Thêm Nhân Viên</a>
         </dd>
     </dl>
 </div>

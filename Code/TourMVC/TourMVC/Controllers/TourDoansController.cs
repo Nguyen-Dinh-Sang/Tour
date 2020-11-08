@@ -236,7 +236,14 @@ namespace TourMVC.Controllers
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = doanKhachHang.DoanId });
             }
-            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet", doanKhachHang.DoanId);
+            var doan = context.TourDoan.Find(doanKhachHang.DoanId);
+
+            if (doan == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doan.DoanTen;
             ViewData["KhachHangId"] = new SelectList(context.TourKhachHang, "KhachHangId", "KhachHangTen", doanKhachHang.KhachHangId);
             return View(doanKhachHang);
         }
@@ -289,6 +296,166 @@ namespace TourMVC.Controllers
             context.DoanKhachHang.Remove(doanKhachHang);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = doanKhachHang.DoanId });
+        }
+
+        public IActionResult AddNhanVien(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var doan = context.TourDoan.Find(id);
+
+            if (doan == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doan.DoanTen;
+            ViewData["NhanVienId"] = new SelectList(context.TourNhanVien, "NhanVienId", "NhanVienTen");
+
+            DoanNhanVien doanNhanVien = new DoanNhanVien();
+            doanNhanVien.DoanId = doan.DoanId;
+            return View(doanNhanVien);
+        }
+
+        // POST: DoanNhanViens/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddNhanVien([Bind("DoanNhanVienId,NhanVienId,NhanVienNhiemVu,NgayTao")] DoanNhanVien doanNhanVien)
+        {
+            if (ModelState.IsValid)
+            {
+                doanNhanVien.DoanId = (int)doanId;
+                context.Add(doanNhanVien);
+                await context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = doanNhanVien.DoanId });
+            }
+
+            var doan = context.TourDoan.Find(doanNhanVien.DoanId);
+
+            if (doan == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doan.DoanTen;
+            ViewData["NhanVienId"] = new SelectList(context.TourNhanVien, "NhanVienId", "NhanVienTen", doanNhanVien.NhanVienId);
+            return View(doanNhanVien);
+        }
+
+        public async Task<IActionResult> EditNhanVien(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var doanNhanVien = await context.DoanNhanVien.Include(dnv => dnv.Doan).Include(dnv => dnv.NhanVien).FirstOrDefaultAsync(dnv => dnv.DoanNhanVienId == id);
+            if (doanNhanVien == null)
+            {
+                return NotFound();
+            }
+            ViewData["DoanId"] = doanNhanVien.Doan.DoanTen;
+            ViewData["NhanVienId"] = doanNhanVien.NhanVien.NhanVienTen;
+            return View(doanNhanVien);
+        }
+
+        // POST: TourDoans/EditNhanVien/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditNhanVien(int id, [Bind("DoanNhanVienId,NhanVienNhiemVu,NgayTao")] DoanNhanVien doanNhanVien)
+        {
+            if (id != doanNhanVien.DoanNhanVienId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var dnv = await context.DoanNhanVien.FindAsync(id);
+                    dnv.NhanVienNhiemVu = doanNhanVien.NhanVienNhiemVu;
+                    context.Update(dnv);
+                    await context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DoanNhanVienExists(doanNhanVien.DoanNhanVienId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Details), new { id = doanId });
+            }
+
+            doanNhanVien = await context.DoanNhanVien.Include(dnv => dnv.Doan).Include(dnv => dnv.NhanVien).FirstOrDefaultAsync(dnv => dnv.DoanNhanVienId == id);
+            if (doanNhanVien == null)
+            {
+                return NotFound();
+            }
+            ViewData["DoanId"] = doanNhanVien.Doan.DoanTen;
+            ViewData["NhanVienId"] = doanNhanVien.NhanVien.NhanVienTen; 
+            return View(doanNhanVien);
+        }
+
+        private bool DoanNhanVienExists(int id)
+        {
+            return context.DoanNhanVien.Any(e => e.DoanNhanVienId == id);
+        }
+
+        public async Task<IActionResult> DetailsNhanVien(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tourNhanVien = await context.TourNhanVien
+                .FirstOrDefaultAsync(m => m.NhanVienId == id);
+            if (tourNhanVien == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doanId;
+            return View(tourNhanVien);
+        }
+
+        public async Task<IActionResult> DeleteNhanVien(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var doanNhanVien = await context.DoanNhanVien
+                .Include(d => d.Doan)
+                .Include(d => d.NhanVien)
+                .FirstOrDefaultAsync(m => m.DoanNhanVienId == id);
+            if (doanNhanVien == null)
+            {
+                return NotFound();
+            }
+
+            return View(doanNhanVien);
+        }
+
+        // POST: DoanNhanViens/Delete/5
+        [HttpPost, ActionName("DeleteNhanVien")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteNhanVienConfirmed(int id)
+        {
+            var doanNhanVien = await context.DoanNhanVien.FindAsync(id);
+            context.DoanNhanVien.Remove(doanNhanVien);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { id = doanNhanVien.DoanId });
         }
     }
 }

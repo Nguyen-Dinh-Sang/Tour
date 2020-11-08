@@ -11,17 +11,17 @@ namespace TourMVC.Controllers
 {
     public class DoanNhanViensController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public DoanNhanViensController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         // GET: DoanNhanViens
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.DoanNhanVien.Include(d => d.Doan).Include(d => d.NhanVien).OrderBy(x=>x.Doan.DoanTen);
+            var tourDBContext = context.DoanNhanVien.Include(d => d.Doan).Include(d => d.NhanVien).OrderBy(x=>x.Doan.DoanTen);
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             var listDoanNhanVien = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listDoanNhanVien);
@@ -31,7 +31,7 @@ namespace TourMVC.Controllers
         {
 
             IEnumerable<DoanNhanVien> listDoanNhanVien;
-            var DoanNhanViens = (from l in _context.DoanNhanVien
+            var DoanNhanViens = (from l in context.DoanNhanVien
                              select l).Include(d => d.Doan).Include(d => d.NhanVien).OrderBy(x => x.Doan.DoanTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(DoanNhanViens.Count() / 5.0);
@@ -74,7 +74,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var doanNhanVien = await _context.DoanNhanVien
+            var doanNhanVien = await context.DoanNhanVien
                 .Include(d => d.Doan)
                 .Include(d => d.NhanVien)
                 .FirstOrDefaultAsync(m => m.DoanNhanVienId == id);
@@ -89,8 +89,8 @@ namespace TourMVC.Controllers
         // GET: DoanNhanViens/Create
         public IActionResult Create()
         {
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet");
-            ViewData["NhanVienId"] = new SelectList(_context.TourNhanVien, "NhanVienId", "NhanVienEmail");
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet");
+            ViewData["NhanVienId"] = new SelectList(context.TourNhanVien, "NhanVienId", "NhanVienEmail");
             return View();
         }
 
@@ -103,12 +103,12 @@ namespace TourMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(doanNhanVien);
-                await _context.SaveChangesAsync();
+                context.Add(doanNhanVien);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet", doanNhanVien.DoanId);
-            ViewData["NhanVienId"] = new SelectList(_context.TourNhanVien, "NhanVienId", "NhanVienEmail", doanNhanVien.NhanVienId);
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet", doanNhanVien.DoanId);
+            ViewData["NhanVienId"] = new SelectList(context.TourNhanVien, "NhanVienId", "NhanVienEmail", doanNhanVien.NhanVienId);
             return View(doanNhanVien);
         }
 
@@ -120,13 +120,13 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var doanNhanVien = await _context.DoanNhanVien.FindAsync(id);
+            var doanNhanVien = await context.DoanNhanVien.FindAsync(id);
             if (doanNhanVien == null)
             {
                 return NotFound();
             }
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet", doanNhanVien.DoanId);
-            ViewData["NhanVienId"] = new SelectList(_context.TourNhanVien, "NhanVienId", "NhanVienEmail", doanNhanVien.NhanVienId);
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet", doanNhanVien.DoanId);
+            ViewData["NhanVienId"] = new SelectList(context.TourNhanVien, "NhanVienId", "NhanVienEmail", doanNhanVien.NhanVienId);
             return View(doanNhanVien);
         }
 
@@ -146,8 +146,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(doanNhanVien);
-                    await _context.SaveChangesAsync();
+                    context.Update(doanNhanVien);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -162,8 +162,8 @@ namespace TourMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DoanId"] = new SelectList(_context.TourDoan, "DoanId", "DoanChiTiet", doanNhanVien.DoanId);
-            ViewData["NhanVienId"] = new SelectList(_context.TourNhanVien, "NhanVienId", "NhanVienEmail", doanNhanVien.NhanVienId);
+            ViewData["DoanId"] = new SelectList(context.TourDoan, "DoanId", "DoanChiTiet", doanNhanVien.DoanId);
+            ViewData["NhanVienId"] = new SelectList(context.TourNhanVien, "NhanVienId", "NhanVienEmail", doanNhanVien.NhanVienId);
             return View(doanNhanVien);
         }
 
@@ -175,7 +175,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var doanNhanVien = await _context.DoanNhanVien
+            var doanNhanVien = await context.DoanNhanVien
                 .Include(d => d.Doan)
                 .Include(d => d.NhanVien)
                 .FirstOrDefaultAsync(m => m.DoanNhanVienId == id);
@@ -192,15 +192,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doanNhanVien = await _context.DoanNhanVien.FindAsync(id);
-            _context.DoanNhanVien.Remove(doanNhanVien);
-            await _context.SaveChangesAsync();
+            var doanNhanVien = await context.DoanNhanVien.FindAsync(id);
+            context.DoanNhanVien.Remove(doanNhanVien);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DoanNhanVienExists(int id)
         {
-            return _context.DoanNhanVien.Any(e => e.DoanNhanVienId == id);
+            return context.DoanNhanVien.Any(e => e.DoanNhanVienId == id);
         }
     }
 }

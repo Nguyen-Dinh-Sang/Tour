@@ -1,25 +1,25 @@
-﻿@model DungKhiCan.Models.DoanNhanVien
+﻿@model TourMVC.Models.DoanNhanVien
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Thêm Mới</h1>
 
-<h4>DoanNhanVien</h4>
+<h4>Nhân Viên</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="AddNhanVien">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NhanVienId" class="control-label"></label>
-                <select asp-for="NhanVienId" class ="form-control" asp-items="ViewBag.NhanVienId"></select>
+                <label class="control-label">Đoàn</label>
+                <input class="form-control" value="@ViewBag.DoanId" readonly />
             </div>
             <div class="form-group">
-                <label asp-for="DoanId" class="control-label"></label>
-                <select asp-for="DoanId" class ="form-control" asp-items="ViewBag.DoanId"></select>
+                <label asp-for="NhanVienId" class="control-label"></label>
+                <select asp-for="NhanVienId" class="form-control" asp-items="ViewBag.NhanVienId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="NhanVienNhiemVu" class="control-label"></label>
@@ -27,14 +27,14 @@
                 <span asp-validation-for="NhanVienNhiemVu" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Thêm Mới" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Details" asp-route-id="@Model.DoanId">Trở Về</a>
 </div>
 
 @section Scripts {
