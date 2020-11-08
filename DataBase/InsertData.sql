@@ -252,17 +252,17 @@ VALUES(1, 4, N'Lái xe')
 GO
 
 -- Các loại chi phí
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Xe', N'Chi phí phương tiện đi lại', 1000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Xe', N'Chi phí phương tiện đi lại')
 
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Ăn', N'Chi phí ăn uống', 1000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Ăn', N'Chi phí ăn uống')
 
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Phòng', N'Chi phí nơi ở', 1000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Phòng', N'Chi phí nơi ở')
 
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Vé', N'Chi phí vào cổng các khu du lịch', 1000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Vé', N'Chi phí vào cổng các khu du lịch')
 GO
 
 -- Tổng chi phí đoàn
