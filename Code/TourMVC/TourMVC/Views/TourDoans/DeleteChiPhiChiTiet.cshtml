@@ -1,0 +1,46 @@
+﻿@model TourMVC.Models.TourChiPhiChiTiet
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Xóa</h1>
+
+<h3>Bạn có chắc chắn muốn xóa?</h3>
+<div>
+    <h4>Chi Phí</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Doan)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Doan.DoanTen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LoaiChiPhi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LoaiChiPhi.LoaiChiPhiMoTa)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ChiPhi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ChiPhi)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NgayTao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NgayTao)
+        </dd>
+    </dl>
+    
+    <form asp-action="DeleteChiPhiChiTiet">
+        <input type="hidden" asp-for="ChiPhiChiTietId" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Details" asp-route-id="@Model.DoanId">Trở Về</a>
+    </form>
+</div>

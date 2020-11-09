@@ -159,9 +159,56 @@
         <dt class="col-sm-2">
             Danh Sách Chi Phí
         </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Loại Chi Phí
+                        </th>
+                        <th>
+                            Chi Phí
+                        </th>
+                        <th>
+                            Ngày Tạo
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TourChiPhiChiTiet)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LoaiChiPhi.LoaiChiPhiTen)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ChiPhi)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NgayTao)
+                            </td>
+                            <td>
+                                <a asp-action="EditChiPhiChiTiet" asp-route-id="@item.ChiPhiChiTietId">Chỉnh Sửa Chi Phí</a> |
+                                <a asp-action="DetailsChiPhiChiTiet" asp-route-id="@item.ChiPhiChiTietId">Chi Tiết</a> |
+                                <a asp-action="DeleteChiPhiChiTiet" asp-route-id="@item.ChiPhiChiTietId">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <a asp-action="AddChiPhiChiTiet" asp-route-id="@Model.DoanId">Thêm Chi Phí</a>
+        </dd>
+        <dt class="col-sm-2">
+            Tổng Chi Phí
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.TongChiPhi
+        </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.DoanId">Chỉnh Sửa</a> |
     <a asp-action="Index">Trở Về</a>
 </div>
+
