@@ -160,28 +160,16 @@ CREATE TABLE Tour_LoaiChiPhi(
 	NgayTao DATE DEFAULT GETDATE(),
 )
 
--- 12 Tổng chi phí của đoàn
-CREATE TABLE Tour_ChiPhi(
-	ChiPhi_ID INT IDENTITY(1,1) PRIMARY KEY,
-	Doan_ID INT NOT NULL,
-	ChiPhiTong DECIMAL(14,1) NOT NULL,
-	NgayTao DATE DEFAULT GETDATE(),
-	CONSTRAINT Tour_ChiPhi_Tour_Doan
-	FOREIGN KEY (Doan_ID)
-	REFERENCES Tour_Doan(Doan_ID)
-	ON DELETE CASCADE
-)
-
 -- 13 Chi tiết chi phí
 CREATE TABLE Tour_ChiPhi_ChiTiet(
 	ChiPhi_ChiTiet_ID INT IDENTITY(1,1) PRIMARY KEY,
-	ChiPhi_ID INT NOT NULL,
+	Doan_ID INT NOT NULL,
 	LoaiChiPhi_ID INT NOT NULL,
 	ChiPhi DECIMAL(13,1) NOT NULL,
 	NgayTao DATE DEFAULT GETDATE(),
 	CONSTRAINT Tour_ChiPhi_ChiTiet_Tour_ChiPhi
-	FOREIGN KEY (ChiPhi_ID)
-	REFERENCES Tour_ChiPhi(ChiPhi_ID)
+	FOREIGN KEY (Doan_ID)
+	REFERENCES Tour_Doan(Doan_ID)
 	ON DELETE CASCADE,
 	CONSTRAINT Tour_ChiPhi_ChiTiet_Tour_LoaiChiPhi
 	FOREIGN KEY (LoaiChiPhi_ID)
