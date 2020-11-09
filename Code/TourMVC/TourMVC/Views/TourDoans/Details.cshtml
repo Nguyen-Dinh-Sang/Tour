@@ -129,33 +129,36 @@
                 <tbody>
                     @foreach (var item in Model.DoanNhanVien)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NhanVien.NhanVienTen)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NhanVien.NhanVienSoDienThoai)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NhanVien.NhanVienEmail)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NhanVienNhiemVu)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NgayTao)
-                        </td>
-                        <td>
-                            <a asp-action="EditNhanVien" asp-route-id="@item.DoanNhanVienId">Chỉnh Sửa Nhiệm Vụ</a> |
-                            <a asp-action="DetailsNhanVien" asp-route-id="@item.NhanVien.NhanVienId">Chi Tiết</a> |
-                            <a asp-action="DeleteNhanVien" asp-route-id="@item.DoanNhanVienId">Xóa</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NhanVien.NhanVienTen)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NhanVien.NhanVienSoDienThoai)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NhanVien.NhanVienEmail)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NhanVienNhiemVu)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NgayTao)
+                            </td>
+                            <td>
+                                <a asp-action="EditNhanVien" asp-route-id="@item.DoanNhanVienId">Chỉnh Sửa Nhiệm Vụ</a> |
+                                <a asp-action="DetailsNhanVien" asp-route-id="@item.NhanVien.NhanVienId">Chi Tiết</a> |
+                                <a asp-action="DeleteNhanVien" asp-route-id="@item.DoanNhanVienId">Xóa</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
             <a asp-action="AddNhanVien" asp-route-id="@Model.DoanId">Thêm Nhân Viên</a>
         </dd>
+        <dt class="col-sm-2">
+            Danh Sách Chi Phí
+        </dt>
     </dl>
 </div>
 <div>
