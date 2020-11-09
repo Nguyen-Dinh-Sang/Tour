@@ -13,7 +13,6 @@ namespace TourMVC.Models
         public int LoaiChiPhiId { get; set; }
         public string LoaiChiPhiTen { get; set; }
         public string LoaiChiPhiMoTa { get; set; }
-        public decimal LoaiChiPhiSoTien { get; set; }
         public DateTime? NgayTao { get; set; }
 
         public virtual ICollection<TourChiPhiChiTiet> TourChiPhiChiTiet { get; set; }
