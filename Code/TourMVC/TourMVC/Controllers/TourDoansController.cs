@@ -80,6 +80,10 @@ namespace TourMVC.Controllers
                 .FirstOrDefaultAsync(m => m.DoanId == id);
             context.Entry(tourDoan).Collection(td => td.DoanKhachHang).Query().Include(dkh => dkh.KhachHang).OrderBy(dkh => dkh.NgayTao).Load();
             context.Entry(tourDoan).Collection(td => td.DoanNhanVien).Query().Include(dnv => dnv.NhanVien).OrderBy(dnv => dnv.NgayTao).Load();
+            context.Entry(tourDoan).Collection(td => td.TourChiPhiChiTiet).Query().Include(tcpct => tcpct.LoaiChiPhi).OrderBy(tcpct => tcpct.NgayTao).Load();
+
+            ViewData["TongChiPhi"] = context.TourChiPhiChiTiet.Where(tcpct => tcpct.DoanId == id).Sum(i => i.ChiPhi);
+
             if (tourDoan == null)
             {
                 return NotFound();
