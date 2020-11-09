@@ -451,7 +451,6 @@ namespace TourMVC.Controllers
             return View(doanNhanVien);
         }
 
-        // POST: DoanNhanViens/Delete/5
         [HttpPost, ActionName("DeleteNhanVien")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteNhanVienConfirmed(int id)
@@ -460,6 +459,167 @@ namespace TourMVC.Controllers
             context.DoanNhanVien.Remove(doanNhanVien);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = doanNhanVien.DoanId });
+        }
+
+        public IActionResult AddChiPhiChiTiet(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var doan = context.TourDoan.Find(id);
+
+            if (doan == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doan.DoanTen;
+            ViewData["LoaiChiPhiId"] = new SelectList(context.TourLoaiChiPhi, "LoaiChiPhiId", "LoaiChiPhiTen");
+
+            TourChiPhiChiTiet doanNhanVien = new TourChiPhiChiTiet();
+            doanNhanVien.DoanId = doan.DoanId;
+            return View(doanNhanVien);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddChiPhiChiTiet([Bind("ChiPhiChiTietId,LoaiChiPhiId,ChiPhi,NgayTao")] TourChiPhiChiTiet tourChiPhiChiTiet)
+        {
+            if (ModelState.IsValid)
+            {
+                tourChiPhiChiTiet.DoanId = (int)doanId;
+                context.Add(tourChiPhiChiTiet);
+                await context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = tourChiPhiChiTiet.DoanId });
+            }
+            var doan = context.TourDoan.Find(tourChiPhiChiTiet.DoanId);
+
+            if (doan == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doan.DoanTen; 
+            ViewData["LoaiChiPhiId"] = new SelectList(context.TourLoaiChiPhi, "LoaiChiPhiId", "LoaiChiPhiTen", tourChiPhiChiTiet.LoaiChiPhiId);
+            return View(tourChiPhiChiTiet);
+        }
+
+        public async Task<IActionResult> EditChiPhiChiTiet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var chiPhiChiTiet = await context.TourChiPhiChiTiet.Include(tcpct => tcpct.Doan).Include(tcpct => tcpct.LoaiChiPhi).FirstOrDefaultAsync(tcpct => tcpct.ChiPhiChiTietId == id);
+            
+            if (chiPhiChiTiet == null)
+            {
+                return NotFound();
+            }
+            
+            ViewData["DoanId"] = chiPhiChiTiet.Doan.DoanTen;
+            ViewData["LoaiChiPhiId"] = chiPhiChiTiet.LoaiChiPhi.LoaiChiPhiTen;
+            return View(chiPhiChiTiet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditChiPhiChiTiet(int id, [Bind("ChiPhiChiTietId,ChiPhi,NgayTao")] TourChiPhiChiTiet tourChiPhiChiTiet)
+        {
+            if (id != tourChiPhiChiTiet.ChiPhiChiTietId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var cpct = await context.TourChiPhiChiTiet.FindAsync(id);
+                    cpct.ChiPhi = tourChiPhiChiTiet.ChiPhi;
+                    context.Update(cpct);
+                    await context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TourChiPhiChiTietExists(tourChiPhiChiTiet.ChiPhiChiTietId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Details), new { id = doanId });
+            }
+            var chiPhiChiTiet = await context.TourChiPhiChiTiet.Include(tcpct => tcpct.Doan).Include(tcpct => tcpct.LoaiChiPhi).FirstOrDefaultAsync(tcpct => tcpct.ChiPhiChiTietId == id);
+
+            if (chiPhiChiTiet == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = chiPhiChiTiet.Doan.DoanTen;
+            ViewData["LoaiChiPhiId"] = chiPhiChiTiet.LoaiChiPhi.LoaiChiPhiTen; 
+            return View(tourChiPhiChiTiet);
+        }
+
+        private bool TourChiPhiChiTietExists(int id)
+        {
+            return context.TourChiPhiChiTiet.Any(e => e.ChiPhiChiTietId == id);
+        }
+
+        public async Task<IActionResult> DetailsChiPhiChiTiet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tourChiPhiChiTiet = await context.TourChiPhiChiTiet
+                .Include(t => t.Doan)
+                .Include(t => t.LoaiChiPhi)
+                .FirstOrDefaultAsync(m => m.ChiPhiChiTietId == id);
+            if (tourChiPhiChiTiet == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DoanId"] = doanId;
+            return View(tourChiPhiChiTiet);
+        }
+
+        public async Task<IActionResult> DeleteChiPhiChiTiet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tourChiPhiChiTiet = await context.TourChiPhiChiTiet
+                .Include(t => t.Doan)
+                .Include(t => t.LoaiChiPhi)
+                .FirstOrDefaultAsync(m => m.ChiPhiChiTietId == id);
+            if (tourChiPhiChiTiet == null)
+            {
+                return NotFound();
+            }
+
+            return View(tourChiPhiChiTiet);
+        }
+
+        [HttpPost, ActionName("DeleteChiPhiChiTiet")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteChiPhiChiTietConfirmed(int id)
+        {
+            var tourChiPhiChiTiet = await context.TourChiPhiChiTiet.FindAsync(id);
+            context.TourChiPhiChiTiet.Remove(tourChiPhiChiTiet);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { id = tourChiPhiChiTiet.DoanId });
         }
     }
 }

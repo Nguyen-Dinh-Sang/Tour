@@ -1,12 +1,13 @@
 ﻿@model TourMVC.Models.TourChiPhiChiTiet
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Chi Tiết</h1>
+<h1>Xóa</h1>
 
+<h3>Bạn có chắc chắn muốn xóa?</h3>
 <div>
     <h4>Chi Phí</h4>
     <hr />
@@ -36,7 +37,10 @@
             @Html.DisplayFor(model => model.NgayTao)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Details" asp-route-id="@ViewBag.DoanId">Trở Về</a>
+    
+    <form asp-action="DeleteChiPhiChiTiet">
+        <input type="hidden" asp-for="ChiPhiChiTietId" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Details" asp-route-id="@Model.DoanId">Trở Về</a>
+    </form>
 </div>

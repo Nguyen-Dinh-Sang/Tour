@@ -189,15 +189,15 @@
                                 @Html.DisplayFor(modelItem => item.NgayTao)
                             </td>
                             <td>
-                                <a asp-action="EditNhanVien" asp-route-id="">Chỉnh Sửa Chi Phí</a> |
-                                <a asp-action="DetailsNhanVien" asp-route-id="">Chi Tiết</a> |
-                                <a asp-action="DeleteNhanVien" asp-route-id="">Xóa</a>
+                                <a asp-action="EditChiPhiChiTiet" asp-route-id="@item.ChiPhiChiTietId">Chỉnh Sửa Chi Phí</a> |
+                                <a asp-action="DetailsChiPhiChiTiet" asp-route-id="@item.ChiPhiChiTietId">Chi Tiết</a> |
+                                <a asp-action="DeleteChiPhiChiTiet" asp-route-id="@item.ChiPhiChiTietId">Xóa</a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <a asp-action="AddChiPhi" asp-route-id="@Model.DoanId">Thêm Chi Phí</a>
+            <a asp-action="AddChiPhiChiTiet" asp-route-id="@Model.DoanId">Thêm Chi Phí</a>
         </dd>
         <dt class="col-sm-2">
             Tổng Chi Phí
