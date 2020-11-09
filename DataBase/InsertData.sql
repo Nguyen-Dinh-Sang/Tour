@@ -252,40 +252,29 @@ VALUES(1, 4, N'Lái xe')
 GO
 
 -- Các loại chi phí
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Xe', N'Chi phí phương tiện đi lại', 1000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Xe', N'Chi phí phương tiện đi lại')
 
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Ăn', N'Chi phí ăn uống', 1000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Ăn', N'Chi phí ăn uống')
 
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Phòng', N'Chi phí nơi ở', 1000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Phòng', N'Chi phí nơi ở')
 
-INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa, LoaiChiPhi_SoTien)
-VALUES(N'Vé', N'Chi phí vào cổng các khu du lịch', 1000000)
-GO
-
--- Tổng chi phí đoàn
-INSERT INTO Tour_ChiPhi(Doan_ID, ChiPhiTong)
-VALUES(1, 3000000)
-
-INSERT INTO Tour_ChiPhi(Doan_ID, ChiPhiTong)
-VALUES(3, 3000000)
+INSERT INTO Tour_LoaiChiPhi(LoaiChiPhi_Ten, LoaiChiPhi_MoTa)
+VALUES(N'Vé', N'Chi phí vào cổng các khu du lịch')
 GO
 
 -- Chi tiết chi phí
-INSERT INTO Tour_ChiPhi_ChiTiet(ChiPhi_ID, LoaiChiPhi_ID, ChiPhi)
+INSERT INTO Tour_ChiPhi_ChiTiet(Doan_ID, LoaiChiPhi_ID, ChiPhi)
 VALUES(1, 1, 1000000)
 
-INSERT INTO Tour_ChiPhi_ChiTiet(ChiPhi_ID, LoaiChiPhi_ID, ChiPhi)
+INSERT INTO Tour_ChiPhi_ChiTiet(Doan_ID, LoaiChiPhi_ID, ChiPhi)
 VALUES(2, 1, 1000000)
 GO
 
 SELECT *
 FROM Tour_ChiPhi_ChiTiet
-
-SELECT *
-FROM Tour_ChiPhi
 
 SELECT *
 FROM Tour_LoaiChiPhi

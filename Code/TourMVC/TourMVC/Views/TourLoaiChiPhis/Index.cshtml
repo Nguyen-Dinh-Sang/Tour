@@ -5,45 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Danh sách loại chi phí</h1>
-@using (Html.BeginForm("Index", "TourLoaiChiPhis", FormMethod.Get))
-{
-<p>
-    <input type="hidden" name="GiaChiPhiTu" value="0" />
-    <input type="hidden" name="GiaChiPhiDen" value="0" />
-    Classify:
-    <select id="classify" name="classify">
-        <option>Tên</option>
-        <option>Mô tả</option>
-    </select>
-    Title: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
-</p>
-}
-@using (Html.BeginForm("Index", "TourLoaiChiPhis", FormMethod.Get))
-{
-<p>
-    <input type="hidden" name="SearchString" value="" />
-    <input type="hidden" name="classify" value="0" />
-    Giá từ:
-    <select id="GiaChiPhiTu" name="GiaChiPhiTu">
-        @for (int i = 0; i <= 100000000; i += 100000)
-        {
-            <option>@i</option>
-        }
+<h1>Dách Sách Loại Chi Phí</h1>
 
-    </select>
-    <select id="GiaChiPhiDen" name="GiaChiPhiDen">
-        Đến:
-        @for (int i = 0; i <= 100000000; i += 100000)
-        {
-            <option>@i</option>
-        }
-    </select>
-    <input type="submit" value="Lọc" />
-</p>
-}
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm Loại Chi Phí Mới</a>
 </p>
 <table class="table">
     <thead>
@@ -55,56 +20,29 @@
                 @Html.DisplayNameFor(model => model.LoaiChiPhiMoTa)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LoaiChiPhiSoTien)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.NgayTao)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LoaiChiPhiTen)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LoaiChiPhiMoTa)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LoaiChiPhiSoTien)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NgayTao)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.LoaiChiPhiId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.LoaiChiPhiId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.LoaiChiPhiId">Delete</a>
-                </td>
-            </tr>
-        }
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiChiPhiTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiChiPhiMoTa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayTao)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LoaiChiPhiId">Chỉnh Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.LoaiChiPhiId">Chi Tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.LoaiChiPhiId">Xóa</a>
+            </td>
+        </tr>
+}
     </tbody>
 </table>
-@{
-    double totalPages = ViewBag.TotalPages;
-    int PageNumber = ViewBag.PageNumber;
-    <div class="pagination" style="float:left">
-        @if (totalPages != 0)
-        {
-            @if (PageNumber > 1)
-            {
-                @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify,GiaChiPhiTu =ViewBag.GiaChiPhiTu, GiaChiPhiDen = ViewBag.GiaChiPhiDen, PageNumber = PageNumber - 1 })
-            }
-            <label>@PageNumber</label>
-            @if (PageNumber != totalPages)
-            {
-                @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, GiaChiPhiTu = ViewBag.GiaChiPhiTu, GiaChiPhiDen = ViewBag.GiaChiPhiDen, PageNumber = PageNumber + 1 })
-            }
-        }
-
-    </div>
-
-}

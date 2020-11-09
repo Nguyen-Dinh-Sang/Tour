@@ -10,7 +10,7 @@ namespace TourMVC.Models
         {
             DoanKhachHang = new HashSet<DoanKhachHang>();
             DoanNhanVien = new HashSet<DoanNhanVien>();
-            TourChiPhi = new HashSet<TourChiPhi>();
+            TourChiPhiChiTiet = new HashSet<TourChiPhiChiTiet>();
         }
 
         public int DoanId { get; set; }
@@ -35,6 +35,6 @@ namespace TourMVC.Models
         public virtual Tour Tour { get; set; }
         public virtual ICollection<DoanKhachHang> DoanKhachHang { get; set; }
         public virtual ICollection<DoanNhanVien> DoanNhanVien { get; set; }
-        public virtual ICollection<TourChiPhi> TourChiPhi { get; set; }
+        public virtual ICollection<TourChiPhiChiTiet> TourChiPhiChiTiet { get; set; }
     }
 }
