@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Dách Sách Loại Chi Phí</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm Loại Chi Phí Mới</a>
 </p>
 <table class="table">
     <thead>
@@ -38,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.NgayTao)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.LoaiChiPhiId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LoaiChiPhiId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LoaiChiPhiId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.LoaiChiPhiId">Chỉnh Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.LoaiChiPhiId">Chi Tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.LoaiChiPhiId">Xóa</a>
             </td>
         </tr>
 }

@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Chỉnh Sửa</h1>
 
-<h4>TourLoaiChiPhi</h4>
+<h4>Loại Chi Phí</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,18 +26,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="NgayTao" class="control-label"></label>
-                <input asp-for="NgayTao" class="form-control" />
+                <input asp-for="NgayTao" class="form-control" readonly/>
                 <span asp-validation-for="NgayTao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Lưu Lại" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Trở Về</a>
 </div>
 
 @section Scripts {
