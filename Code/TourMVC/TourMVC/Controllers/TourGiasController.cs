@@ -33,6 +33,12 @@ namespace TourMVC.Controllers
             IEnumerable<TourGia> listTourGia;
             var tourGias = (from l in _context.TourGia
                                    select l).Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
+            var tourGiaNotUse = from tgnu in _context.TourGia
+                                where !((from tght in _context.GiaTourHienTai
+                                        select tght.GiaId).Contains(tgnu.GiaId))
+                                select tgnu;
+            ViewBag.tourGiaNotUse = tourGiaNotUse.ToList();
+            ViewBag.tourGiaTenTour = _context.Tour;
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourGias.Count() / 5.0);
             if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên tour") == true)

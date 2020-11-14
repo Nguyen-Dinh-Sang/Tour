@@ -35,11 +35,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="TourId" class="control-label"></label>
-                <select asp-for="TourId" class="form-control" asp-items="ViewBag.TourId"></select>
+                <select asp-for="TourId" id="changeDoanTourId" class="form-control" asp-items="ViewBag.TourId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="DoanGiaTour" class="control-label"></label>
-                <input asp-for="DoanGiaTour" class="form-control" value="0" readonly/>
+                <input asp-for="DoanGiaTour" id="changeDoanGiaTour" class="form-control" value="0" readonly/>
                 <span asp-validation-for="DoanGiaTour" class="text-danger"></span>
             </div>
             <div class="form-group">

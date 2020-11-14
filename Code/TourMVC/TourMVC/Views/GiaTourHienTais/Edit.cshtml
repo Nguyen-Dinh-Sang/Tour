@@ -16,11 +16,14 @@
             <input type="hidden" asp-for="TourId" />
             <div class="form-group">
                 <label class="control-label">Tour</label>
-                <input  class="form-control" value="@ViewBag.TourId" readonly/>
+                <input class="form-control" value="@ViewBag.TourId" readonly />
+                <input type="hidden" class="form-control" id="changeSalary" value="@ViewBag.editTourId" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="GiaId" class="control-label"></label>
-                <select asp-for="GiaId" class="form-control" asp-items="ViewBag.GiaId"></select>
+                <div id="result">
+                    <select asp-for="GiaId" class="form-control" asp-items="ViewBag.GiaId"></select>
+                </div>
                 <span asp-validation-for="GiaId" class="text-danger"></span>
             </div>
             <div class="form-group">

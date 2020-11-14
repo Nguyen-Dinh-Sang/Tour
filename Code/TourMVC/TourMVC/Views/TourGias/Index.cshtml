@@ -11,12 +11,29 @@
     <p>
         <input type="hidden" name="GiaTu" value="0" />
         <input type="hidden" name="GiaDen" value="0" />
-        Classify:
+        Loại tìm kiếm:
         <select id="classify" name="classify">
             <option>Tên tour</option>
         </select>
-        Title: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
+        Nội dung: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
     </p>
+}
+@using (Html.BeginForm("Index", "TourGias", FormMethod.Get))
+{
+<p>
+    <input type="hidden" name="GiaTu" value="0" />
+    <input type="hidden" name="GiaDen" value="0" />
+    <input type="hidden" name="classify" value="Tên tour" />
+    Chọn tên Tour:
+    <select id="SearchString" name="SearchString">
+        @foreach (var item in ViewBag.tourGiaTenTour)
+        {
+            <option>@item.TourTen</option>
+        }
+
+    </select>
+    <input type="submit" value="Xem" />
+</p>
 }
 @using (Html.BeginForm("Index", "TourGias", FormMethod.Get))
 {
@@ -86,8 +103,15 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.GiaId">Chỉnh Sửa</a> |
-                    <a asp-action="Details" asp-route-id="@item.GiaId">Chi Tiết</a> |
-                    <a asp-action="Delete" asp-route-id="@item.GiaId">Xóa</a>
+                    <a asp-action="Details" asp-route-id="@item.GiaId">Chi Tiết</a>
+                    @foreach (var items in ViewBag.tourGiaNotUse)
+                    {
+                        @if (item.GiaId.Equals(items.GiaId))
+                        {
+                            <label>&#124; &nbsp;</label><a asp-action="Delete" asp-route-id="@item.GiaId">Xóa</a>
+                        }
+                    }
+
                 </td>
             </tr>
         }

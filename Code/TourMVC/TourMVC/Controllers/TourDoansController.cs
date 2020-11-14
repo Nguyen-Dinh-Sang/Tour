@@ -91,7 +91,17 @@ namespace TourMVC.Controllers
             doanId = id;
             return View(tourDoan);
         }
-
+        public IActionResult getGiaTour(int? id)
+        {
+            var getGiaTours = from gt in context.TourGia
+                              where ((from gtht in context.GiaTourHienTai
+                                      where gtht.TourId.Equals(id)
+                                      select gtht.GiaId).Contains(gt.GiaId))
+                              select gt;
+            foreach (var c in getGiaTours) Console.WriteLine(c.GiaSoTien);
+            return new JsonResult(getGiaTours);
+            
+        }
         // GET: TourDoans/Create
         public IActionResult Create()
         {

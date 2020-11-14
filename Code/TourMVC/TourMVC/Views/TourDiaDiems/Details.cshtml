@@ -35,6 +35,44 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.NgayTao)
         </dd>
+        <dt class="col-sm-2">
+            <label>Danh sách các tour</label>
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Tên Tour
+                        </th>
+                        <th>
+                            Mô tả
+                        </th>
+                        <th>
+                            Loại Tour
+                        </th>
+                 
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TourChiTiet)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Tour.TourTen)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Tour.TourMoTa)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Tour.Loai.LoaiTen)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </dd>
+
     </dl>
 </div>
 <div>

@@ -27,7 +27,7 @@ namespace TourMVC.Controllers
             return View(listTourGiaHienTai);
         }
         [HttpGet]
-        public IActionResult Index(long GiaTourTu, long GiaTourDen, int PageNumber = 1)
+        public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
         {
 
             IEnumerable<GiaTourHienTai> listTourGiaHienTai;
@@ -35,12 +35,21 @@ namespace TourMVC.Controllers
             var tourDBContext = context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour).OrderBy(x => x.Tour.TourTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
-            if (GiaTourDen!=0)
+            if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên tour") == true)
             {
-                ViewBag.GiaTourTu = GiaTourTu ;
-                ViewBag.GiaTourDen =GiaTourDen;
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
                 ViewBag.PageNumber = PageNumber;
-                listTourGiaHienTai = tourDBContext.Where(s => s.Gia.GiaSoTien>GiaTourTu && s.Gia.GiaSoTien<=GiaTourDen);
+                listTourGiaHienTai = tourDBContext.Where(s => s.Tour.TourTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourGiaHienTai.Count() / 5.0);
+                return View(listTourGiaHienTai.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (GiaDen!=0)
+            {
+                ViewBag.GiaTourTu = GiaTu ;
+                ViewBag.GiaTourDen =GiaDen;
+                ViewBag.PageNumber = PageNumber;
+                listTourGiaHienTai = tourDBContext.Where(s => s.Gia.GiaSoTien>GiaTu && s.Gia.GiaSoTien<=GiaDen);
                 ViewBag.TotalPages = Math.Ceiling(listTourGiaHienTai.Count() / 5.0);
                 return View(listTourGiaHienTai.Skip((PageNumber - 1) * 5).Take(5).ToList());
             }
@@ -65,12 +74,27 @@ namespace TourMVC.Controllers
 
             return View(giaTourHienTai);
         }
+        public IActionResult Jquery(int ?id)
+        {
+            Console.WriteLine(id);
+            var tourGia = from tg in context.TourGia
+                          where tg.TourId.Equals(id)
+                          select tg;
+            foreach (var c in tourGia) Console.WriteLine(c.TourId);
+            return new JsonResult(tourGia);
 
+            
+        }
         // GET: GiaTourHienTais/Create
         public IActionResult Create()
         {
+            var Tour = from t in context.Tour
+                       where !((from gtht in context.GiaTourHienTai
+                                select gtht.TourId).Contains(t.TourId))
+                       select t;
+            foreach (var c in Tour) Console.WriteLine(c.GiaTourHienTai);
             ViewData["GiaId"] = new SelectList(context.TourGia, "GiaId", "GiaTuNgay");
-            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen");
+            ViewData["TourId"] = new SelectList(Tour, "TourId", "TourTen");
             return View();
         }
 
@@ -106,6 +130,7 @@ namespace TourMVC.Controllers
             ViewData["GiaId"] = new SelectList(context.TourGia, "GiaId", "GiaTuNgay", giaTourHienTai.GiaId);
             var tour = await context.Tour.FindAsync(giaTourHienTai.TourId);
             ViewData["TourId"] = tour.TourTen;
+            ViewBag.editTourId = id;
             return View(giaTourHienTai);
         }
 

@@ -76,6 +76,7 @@ namespace TourMVC.Controllers
 
             var tourDiaDiem = await context.TourDiaDiem
                 .FirstOrDefaultAsync(m => m.DiaDiemId == id);
+            context.Entry(tourDiaDiem).Collection(tdd => tdd.TourChiTiet).Query().Include(tct => tct.Tour).Include(t => t.Tour.Loai).Load();
             if (tourDiaDiem == null)
             {
                 return NotFound();
@@ -170,7 +171,6 @@ namespace TourMVC.Controllers
 
             return View(tourDiaDiem);
         }
-
         // POST: TourDiaDiems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
