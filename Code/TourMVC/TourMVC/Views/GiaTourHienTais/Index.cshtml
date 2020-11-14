@@ -13,15 +13,29 @@
 @using (Html.BeginForm("Index", "GiaTourHienTais", FormMethod.Get))
 {
     <p>
+        <input type="hidden" name="GiaTu" value="0" />
+        <input type="hidden" name="GiaDen" value="0" />
+        Classify:
+        <select id="classify" name="classify">
+            <option>Tên tour</option>
+        </select>
+        Title: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
+    </p>
+}
+@using (Html.BeginForm("Index", "GiaTourHienTais", FormMethod.Get))
+{
+    <p>
+        <input type="hidden" name="SearchString" value="" />
+        <input type="hidden" name="classify" value="0" />
         Giá từ:
-        <select id="GiaTourTu" name="GiaTourTu">
+        <select id="GiaTu" name="GiaTu">
             @for (int i = 0; i <= 100000000; i += 100000)
             {
                 <option>@i</option>
             }
 
         </select>
-        <select id="GiaTourDen" name="GiaTourDen">
+        <select id="GiaDen" name="GiaDen">
             Đến:
             @for (int i = 0; i <= 100000000; i += 100000)
             {
@@ -49,21 +63,21 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tour.TourTen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gia.GiaSoTien)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TourId">Chỉnh Sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.TourId">Chi Tiết</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tour.TourTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gia.GiaSoTien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.TourId">Chỉnh Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.TourId">Chi Tiết</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -75,13 +89,13 @@
         {
             @if (PageNumber > 1)
             {
-                @Html.ActionLink("<<<", "Index", new { GiaTourTu = ViewBag.GiaTourTu, GiaTourDen = ViewBag.GiaTourDen, PageNumber = PageNumber - 1 })
+                @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, GiaTu = ViewBag.GiaTu, GiaDen = ViewBag.GiaDen, PageNumber = PageNumber - 1 })
             }
-        <label>@PageNumber</label>
-        @if (PageNumber != totalPages)
-        {
-            @Html.ActionLink(">>>", "Index", new { GiaTourTu = ViewBag.GiaTourTu, GiaTourDen = ViewBag.GiaTourDen, PageNumber = PageNumber + 1 })
-        }   
+            <label>@PageNumber</label>
+            @if (PageNumber != totalPages)
+            {
+                @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, GiaTu = ViewBag.GiaTu, GiaDen = ViewBag.GiaDen, PageNumber = PageNumber + 1 })
+            }
         }
 
     </div>

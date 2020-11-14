@@ -28,7 +28,7 @@ namespace TourMVC.Controllers
             return View(listTour);
         }
         [HttpGet]
-        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
         {
 
             IEnumerable<Tour> listTour;
@@ -60,6 +60,17 @@ namespace TourMVC.Controllers
                 ViewBag.classify = classify;
                 ViewBag.PageNumber = PageNumber;
                 listTour = tour.Where(s => s.Loai.LoaiTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTour.Count() / 5.0);
+                return View(listTour.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (GiaDen != 0)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.GiaTu = GiaTu;
+                ViewBag.GiaDen = GiaDen;
+                ViewBag.PageNumber = PageNumber;
+                listTour = tour.Where(s => s.GiaTourHienTai.Gia.GiaSoTien > GiaTu && s.GiaTourHienTai.Gia.GiaSoTien <= GiaDen);
                 ViewBag.TotalPages = Math.Ceiling(listTour.Count() / 5.0);
                 return View(listTour.Skip((PageNumber - 1) * 5).Take(5).ToList());
             }
@@ -308,7 +319,14 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            ViewData["DiaDiemId"] = new SelectList(context.TourDiaDiem, "DiaDiemId", "DiaDiemTen");
+            Console.WriteLine("chạy tới dây rồi.");
+            var tourDiaDiem = from dd in context.TourDiaDiem
+                              where !((from ctdd in context.TourChiTiet
+                                                          where ctdd.TourId.Equals(id)
+                                                          select ctdd.DiaDiemId).Contains(dd.DiaDiemId))
+                              select dd;
+            foreach (var c in tourDiaDiem) Console.WriteLine(c.DiaDiemTen);
+            ViewData["DiaDiemId"] = new SelectList(tourDiaDiem, "DiaDiemId", "DiaDiemTen");
             ViewData["TourId"] = tour.TourTen;
 
             TourChiTiet tourChiTiet = new TourChiTiet();
