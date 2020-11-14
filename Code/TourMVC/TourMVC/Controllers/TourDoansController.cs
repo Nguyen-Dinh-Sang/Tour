@@ -28,7 +28,7 @@ namespace TourMVC.Controllers
             return View(listTourDoan);
         }
         [HttpGet]
-        public IActionResult Index(string classify, string searchString, int PageNumber = 1)
+        public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
         {
 
             IEnumerable<TourDoan> listTourDoan;
@@ -36,6 +36,7 @@ namespace TourMVC.Controllers
                                    select l).Include(t=>t.Tour).OrderBy(x => x.DoanTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourDoans.Count() / 5.0);
+            ViewBag.tourDoanTenTour = context.Tour;
             if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên đoàn") == true)
             {
                 ViewBag.searchString = searchString;
@@ -60,6 +61,17 @@ namespace TourMVC.Controllers
                 ViewBag.classify = classify;
                 ViewBag.PageNumber = PageNumber;
                 listTourDoan = tourDoans.Where(s => s.Tour.TourTen.Contains(searchString));
+                ViewBag.TotalPages = Math.Ceiling(listTourDoan.Count() / 5.0);
+                return View(listTourDoan.Skip((PageNumber - 1) * 5).Take(5).ToList());
+            }
+            if (GiaDen != 0)
+            {
+                ViewBag.searchString = searchString;
+                ViewBag.classify = classify;
+                ViewBag.GiaTu = GiaTu;
+                ViewBag.GiaDen = GiaDen;
+                ViewBag.PageNumber = PageNumber;
+                listTourDoan = tourDoans.Where(s => s.DoanGiaTour > GiaTu && s.DoanGiaTour <= GiaDen);
                 ViewBag.TotalPages = Math.Ceiling(listTourDoan.Count() / 5.0);
                 return View(listTourDoan.Skip((PageNumber - 1) * 5).Take(5).ToList());
             }
@@ -228,9 +240,14 @@ namespace TourMVC.Controllers
             {
                 return NotFound();
             }
-
+            var tourDoanKhachHang = from dkh in context.TourKhachHang
+                                    where !((from kh in context.DoanKhachHang
+                                             where kh.DoanId.Equals(id)
+                                             select kh.KhachHangId).Contains(dkh.KhachHangId)
+                                            )
+                                    select dkh;
             ViewData["DoanId"] = doan.DoanTen;
-            ViewData["KhachHangId"] = new SelectList(context.TourKhachHang, "KhachHangId", "KhachHangTen");
+            ViewData["KhachHangId"] = new SelectList(tourDoanKhachHang, "KhachHangId", "KhachHangTen");
 
             DoanKhachHang doanKhach = new DoanKhachHang();
             doanKhach.DoanId = doan.DoanId;
@@ -256,7 +273,7 @@ namespace TourMVC.Controllers
             {
                 return NotFound();
             }
-
+            
             ViewData["DoanId"] = doan.DoanTen;
             ViewData["KhachHangId"] = new SelectList(context.TourKhachHang, "KhachHangId", "KhachHangTen", doanKhachHang.KhachHangId);
             return View(doanKhachHang);
@@ -325,9 +342,14 @@ namespace TourMVC.Controllers
             {
                 return NotFound();
             }
-
+            var tourDoanNhanVien = from dnv in context.TourNhanVien
+                               where !((from nv in context.DoanNhanVien
+                                       where nv.DoanId.Equals(id)
+                                       select nv.NhanVienId).Contains(dnv.NhanVienId)
+                                       )
+                               select dnv;
             ViewData["DoanId"] = doan.DoanTen;
-            ViewData["NhanVienId"] = new SelectList(context.TourNhanVien, "NhanVienId", "NhanVienTen");
+            ViewData["NhanVienId"] = new SelectList(tourDoanNhanVien, "NhanVienId", "NhanVienTen");
 
             DoanNhanVien doanNhanVien = new DoanNhanVien();
             doanNhanVien.DoanId = doan.DoanId;
@@ -484,9 +506,14 @@ namespace TourMVC.Controllers
             {
                 return NotFound();
             }
-
+            var loaiChiPhi = from lcp in context.TourLoaiChiPhi
+                             where !((from cpct in context.TourChiPhiChiTiet
+                                      where cpct.DoanId.Equals(id)
+                                      select cpct.LoaiChiPhiId).Contains(lcp.LoaiChiPhiId)
+                                    )
+                             select lcp;
             ViewData["DoanId"] = doan.DoanTen;
-            ViewData["LoaiChiPhiId"] = new SelectList(context.TourLoaiChiPhi, "LoaiChiPhiId", "LoaiChiPhiTen");
+            ViewData["LoaiChiPhiId"] = new SelectList(loaiChiPhi, "LoaiChiPhiId", "LoaiChiPhiTen");
 
             TourChiPhiChiTiet doanNhanVien = new TourChiPhiChiTiet();
             doanNhanVien.DoanId = doan.DoanId;
