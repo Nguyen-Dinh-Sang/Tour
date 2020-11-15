@@ -9,7 +9,7 @@
 @using (Html.BeginForm("Index", "TourDoans", FormMethod.Get))
 {
     <p>
-        
+
         Loại tìm kiếm:
         <select id="classify" name="classify">
             <option>Tên đoàn</option>
@@ -17,6 +17,46 @@
             <option>Tên tour</option>
         </select>
         Nội dung: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
+    </p>
+}
+@using (Html.BeginForm("Index", "TourDoans", FormMethod.Get))
+{
+    <p>
+        <input type="hidden" name="GiaTu" value="0" />
+        <input type="hidden" name="GiaDen" value="0" />
+        <input type="hidden" name="classify" value="Tên tour" />
+        Chọn tên Tour:
+        <select id="SearchString" name="SearchString">
+            @foreach (var item in ViewBag.tourDoanTenTour)
+            {
+                <option>@item.TourTen</option>
+            }
+
+        </select>
+        <input type="submit" value="Xem" />
+    </p>
+}
+@using (Html.BeginForm("Index", "TourDoans", FormMethod.Get))
+{
+    <p>
+        <input type="hidden" name="SearchString" value="" />
+        <input type="hidden" name="classify" value="0" />
+        Giá từ:
+        <select id="GiaTu" name="GiaTu">
+            @for (int i = 0; i <= 100000000; i += 100000)
+            {
+                <option>@i</option>
+            }
+
+        </select>
+        <select id="GiaDen" name="GiaDen">
+            Đến:
+            @for (int i = 0; i <= 100000000; i += 100000)
+            {
+                <option>@i</option>
+            }
+        </select>
+        <input type="submit" value="Lọc" />
     </p>
 }
 <p>
@@ -52,34 +92,34 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DoanTen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DoanChiTiet)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DoanNgayDi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DoanNgayVe)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tour.TourTen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DoanGiaTour)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DoanId">Chỉnh Sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.DoanId">Chi Tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.DoanId">Xóa</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoanTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoanChiTiet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoanNgayDi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoanNgayVe)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tour.TourTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoanGiaTour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DoanId">Chỉnh Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.DoanId">Chi Tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DoanId">Xóa</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -91,12 +131,12 @@
         {
             @if (PageNumber > 1)
             {
-                @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber - 1 })
+                @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, GiaTu = ViewBag.GiaTu, GiaDen = ViewBag.GiaDen, PageNumber = PageNumber - 1 })
             }
             <label>@PageNumber</label>
             @if (PageNumber != totalPages)
             {
-                @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, PageNumber = PageNumber + 1 })
+                @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, classify = ViewBag.classify, GiaTu = ViewBag.GiaTu, GiaDen = ViewBag.GiaDen, PageNumber = PageNumber + 1 })
             }
         }
 
