@@ -11,35 +11,83 @@
     <h4>Nhân Viên</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NhanVienTen)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NhanVienTen)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NhanVienSoDienThoai)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NhanVienSoDienThoai)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NhanVienEmail)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NhanVienEmail)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NhanVienNgaySinh)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NhanVienNgaySinh)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NgayTao)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NgayTao)
+        </dd>
+        <dt class="col-sm-2">
+            Các Đoàn Đã Tham Gia
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Tên Đoàn
+                        </th>
+                        <th>
+                            Tour
+                        </th>
+                        <th>
+                            Ngày Đi
+                        </th>
+                        <th>
+                            Ngày Về
+                        </th>
+                        <th>
+                            Nhiệm vụ
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.DoanNhanVien)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.DoanTen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.Tour.TourTen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.DoanNgayDi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.DoanNgayVe)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NhanVienNhiemVu)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
         </dd>
     </dl>
 </div>

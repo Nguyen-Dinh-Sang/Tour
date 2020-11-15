@@ -11,23 +11,71 @@
     <h4>Loại Chi Phí</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LoaiChiPhiTen)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LoaiChiPhiTen)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LoaiChiPhiMoTa)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LoaiChiPhiMoTa)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NgayTao)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NgayTao)
+        </dd>
+        <dt class="col-sm-2">
+            Chi Phí Các Đoàn
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Tên Đoàn
+                        </th>
+                        <th>
+                            Tour
+                        </th>
+                        <th>
+                            Ngày Đi
+                        </th>
+                        <th>
+                            Ngày Về
+                        </th>
+                        <th>
+                            Chi Phí
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TourChiPhiChiTiet)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.DoanTen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.Tour.TourTen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.DoanNgayDi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doan.DoanNgayVe)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ChiPhi)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
         </dd>
     </dl>
 </div>

@@ -32,6 +32,9 @@ namespace TourMVC.Controllers
 
             var tourLoaiChiPhi = await context.TourLoaiChiPhi
                 .FirstOrDefaultAsync(m => m.LoaiChiPhiId == id);
+
+            context.Entry(tourLoaiChiPhi).Collection(lcp => lcp.TourChiPhiChiTiet).Query().Include(cpct => cpct.Doan).Include(cpct => cpct.Doan.Tour).OrderBy(cpct => cpct.NgayTao).Load();
+
             if (tourLoaiChiPhi == null)
             {
                 return NotFound();
