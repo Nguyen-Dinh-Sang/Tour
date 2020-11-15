@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TourMVC.Models.ThongKeTour>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Doanh Thu Tour</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TourTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TongSoDoan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TongDoanhThu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TongChiPhi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TongLoiNhuan)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TourTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TongSoDoan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TongDoanhThu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TongChiPhi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TongLoiNhuan)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TourId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TourId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TourId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
