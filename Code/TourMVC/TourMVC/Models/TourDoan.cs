@@ -17,14 +17,18 @@ namespace TourMVC.Models
         [Display(Name = "Tour")]
         public int TourId { get; set; }
         [Display(Name = "Tên Đoàn")]
+        [Required(ErrorMessage = "Đoàn Không Được Để Trống")]
         public string DoanTen { get; set; }
         [Display(Name = "Ngày Đi")]
         [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Ngày Đi Không Được Để Trống")]
         public DateTime DoanNgayDi { get; set; }
         [Display(Name = "Ngày Về")]
         [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Ngày Về Không Được Để Trống")]
         public DateTime DoanNgayVe { get; set; }
         [Display(Name = "Chi Tiết Đoàn")]
+        [Required(ErrorMessage = "Chi Tiết Không Được Để Trống")]
         public string DoanChiTiet { get; set; }
         [Display(Name = "Giá Tour")]
         public decimal DoanGiaTour { get; set; }

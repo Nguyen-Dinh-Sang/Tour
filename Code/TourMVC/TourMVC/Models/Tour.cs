@@ -14,9 +14,11 @@ namespace TourMVC.Models
         }
 
         public int TourId { get; set; }
-        [Display(Name = "Tên Tour")]    
+        [Display(Name = "Tên Tour")]
+        [Required(ErrorMessage = "Tour Không Được Để Trống")]
         public string TourTen { get; set; }
         [Display(Name = "Mô Tả")]
+        [Required(ErrorMessage = "Mô Tả Không Được Để Trống")]
         public string TourMoTa { get; set; }
         [Display(Name = "Loại Tour")]
         public int LoaiId { get; set; }
