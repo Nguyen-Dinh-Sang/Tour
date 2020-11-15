@@ -13,8 +13,10 @@ namespace TourMVC.Models
 
         public int LoaiChiPhiId { get; set; }
         [Display(Name = "Loại Chi Phí")]
+        [Required(ErrorMessage = "Loại Chi Phí Không Được Để Trống")]
         public string LoaiChiPhiTen { get; set; }
         [Display(Name = "Mô Tả")]
+        [Required(ErrorMessage = "Mô Tả Không Được Để Trống")]
         public string LoaiChiPhiMoTa { get; set; }
         [Display(Name = "Ngày Tạo")]
         [DataType(DataType.Date)]
