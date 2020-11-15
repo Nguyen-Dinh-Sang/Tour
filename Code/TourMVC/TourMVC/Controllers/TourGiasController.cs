@@ -18,24 +18,24 @@ namespace TourMVC.Controllers
             _context = new TourDBContext();
         }
 
-        // GET: TourGias
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.TourGia.Include(t => t.Tour).OrderBy(x=>x.Tour.TourTen);
+            var tourDBContext = _context.TourGia.Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             var listTourGia = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourGia);
         }
+
         [HttpGet]
         public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
         {
 
             IEnumerable<TourGia> listTourGia;
             var tourGias = (from l in _context.TourGia
-                                   select l).Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
+                            select l).Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
             var tourGiaNotUse = from tgnu in _context.TourGia
                                 where !((from tght in _context.GiaTourHienTai
-                                        select tght.GiaId).Contains(tgnu.GiaId))
+                                         select tght.GiaId).Contains(tgnu.GiaId))
                                 select tgnu;
             ViewBag.tourGiaNotUse = tourGiaNotUse.ToList();
             ViewBag.tourGiaTenTour = _context.Tour;
@@ -65,7 +65,7 @@ namespace TourMVC.Controllers
 
             return View(tourGias.Skip((PageNumber - 1) * 5).Take(5).ToList());
         }
-        // GET: TourGias/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -84,16 +84,12 @@ namespace TourMVC.Controllers
             return View(tourGia);
         }
 
-        // GET: TourGias/Create
         public IActionResult Create()
         {
             ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourTen");
             return View();
         }
 
-        // POST: TourGias/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GiaId,GiaSoTien,TourId,GiaTuNgay,GiaDenNgay,NgayTao")] TourGia tourGia)
@@ -108,7 +104,6 @@ namespace TourMVC.Controllers
             return View(tourGia);
         }
 
-        // GET: TourGias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -125,9 +120,6 @@ namespace TourMVC.Controllers
             return View(tourGia);
         }
 
-        // POST: TourGias/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("GiaId,GiaSoTien,TourId,GiaTuNgay,GiaDenNgay,NgayTao")] TourGia tourGia)
@@ -161,7 +153,6 @@ namespace TourMVC.Controllers
             return View(tourGia);
         }
 
-        // GET: TourGias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,7 +171,6 @@ namespace TourMVC.Controllers
             return View(tourGia);
         }
 
-        // POST: TourGias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -18,20 +18,20 @@ namespace TourMVC.Controllers
             context = new TourDBContext();
         }
 
-        // GET: GiaTourHienTais
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext =context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour);
+            var tourDBContext = context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour);
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             var listTourGiaHienTai = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourGiaHienTai);
         }
+
         [HttpGet]
         public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
         {
 
             IEnumerable<GiaTourHienTai> listTourGiaHienTai;
-          
+
             var tourDBContext = context.GiaTourHienTai.Include(g => g.Gia).Include(g => g.Tour).OrderBy(x => x.Tour.TourTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
@@ -44,18 +44,18 @@ namespace TourMVC.Controllers
                 ViewBag.TotalPages = Math.Ceiling(listTourGiaHienTai.Count() / 5.0);
                 return View(listTourGiaHienTai.Skip((PageNumber - 1) * 5).Take(5).ToList());
             }
-            if (GiaDen!=0)
+            if (GiaDen != 0)
             {
-                ViewBag.GiaTourTu = GiaTu ;
-                ViewBag.GiaTourDen =GiaDen;
+                ViewBag.GiaTourTu = GiaTu;
+                ViewBag.GiaTourDen = GiaDen;
                 ViewBag.PageNumber = PageNumber;
-                listTourGiaHienTai = tourDBContext.Where(s => s.Gia.GiaSoTien>GiaTu && s.Gia.GiaSoTien<=GiaDen);
+                listTourGiaHienTai = tourDBContext.Where(s => s.Gia.GiaSoTien > GiaTu && s.Gia.GiaSoTien <= GiaDen);
                 ViewBag.TotalPages = Math.Ceiling(listTourGiaHienTai.Count() / 5.0);
                 return View(listTourGiaHienTai.Skip((PageNumber - 1) * 5).Take(5).ToList());
             }
             return View(tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList());
         }
-        // GET: GiaTourHienTais/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -74,7 +74,7 @@ namespace TourMVC.Controllers
 
             return View(giaTourHienTai);
         }
-        public IActionResult Jquery(int ?id)
+        public IActionResult Jquery(int? id)
         {
             Console.WriteLine(id);
             var tourGia = from tg in context.TourGia
@@ -83,9 +83,9 @@ namespace TourMVC.Controllers
             foreach (var c in tourGia) Console.WriteLine(c.TourId);
             return new JsonResult(tourGia);
 
-            
+
         }
-        // GET: GiaTourHienTais/Create
+
         public IActionResult Create()
         {
             var Tour = from t in context.Tour
@@ -98,7 +98,6 @@ namespace TourMVC.Controllers
             return View();
         }
 
-        // POST: GiaTourHienTais/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TourId,GiaId,NgayTao")] GiaTourHienTai giaTourHienTai)
@@ -114,7 +113,6 @@ namespace TourMVC.Controllers
             return View(giaTourHienTai);
         }
 
-        // GET: GiaTourHienTais/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -134,7 +132,6 @@ namespace TourMVC.Controllers
             return View(giaTourHienTai);
         }
 
-        // POST: GiaTourHienTais/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("GiaId,NgayTao")] GiaTourHienTai giaTourHienTai)
@@ -172,7 +169,6 @@ namespace TourMVC.Controllers
             return View(giaTourHienTai);
         }
 
-        // GET: GiaTourHienTais/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -192,7 +188,6 @@ namespace TourMVC.Controllers
             return View(giaTourHienTai);
         }
 
-        // POST: GiaTourHienTais/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

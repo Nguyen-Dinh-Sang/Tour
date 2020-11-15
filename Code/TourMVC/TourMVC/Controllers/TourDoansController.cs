@@ -19,21 +19,21 @@ namespace TourMVC.Controllers
             context = new TourDBContext();
         }
 
-        // GET: TourDoans
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = context.TourDoan.Include(t => t.Tour).OrderBy(x=>x.DoanTen);
+            var tourDBContext = context.TourDoan.Include(t => t.Tour).OrderBy(x => x.DoanTen);
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             var listTourDoan = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourDoan);
         }
+
         [HttpGet]
         public IActionResult Index(string classify, string searchString, long GiaTu, long GiaDen, int PageNumber = 1)
         {
 
             IEnumerable<TourDoan> listTourDoan;
             var tourDoans = (from l in context.TourDoan
-                                   select l).Include(t=>t.Tour).OrderBy(x => x.DoanTen);
+                             select l).Include(t => t.Tour).OrderBy(x => x.DoanTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourDoans.Count() / 5.0);
             ViewBag.tourDoanTenTour = context.Tour;
@@ -79,7 +79,7 @@ namespace TourMVC.Controllers
 
             return View(tourDoans.Skip((PageNumber - 1) * 5).Take(5).ToList());
         }
-        // GET: TourDoans/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -112,16 +112,15 @@ namespace TourMVC.Controllers
                               select gt;
             foreach (var c in getGiaTours) Console.WriteLine(c.GiaSoTien);
             return new JsonResult(getGiaTours);
-            
+
         }
-        // GET: TourDoans/Create
+
         public IActionResult Create()
         {
             ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen");
             return View();
         }
 
-        // POST: TourDoans/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DoanId,TourId,DoanTen,DoanNgayDi,DoanNgayVe,DoanChiTiet,DoanGiaTour,NgayTao")] TourDoan tourDoan)
@@ -138,7 +137,6 @@ namespace TourMVC.Controllers
             return View(tourDoan);
         }
 
-        // GET: TourDoans/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -155,7 +153,6 @@ namespace TourMVC.Controllers
             return View(tourDoan);
         }
 
-        // POST: TourDoans/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DoanId,TourId,DoanTen,DoanNgayDi,DoanNgayVe,DoanChiTiet,DoanGiaTour,NgayTao")] TourDoan tourDoan)
@@ -191,7 +188,6 @@ namespace TourMVC.Controllers
             return View(tourDoan);
         }
 
-        // GET: TourDoans/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -210,7 +206,6 @@ namespace TourMVC.Controllers
             return View(tourDoan);
         }
 
-        // POST: TourDoans/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -226,7 +221,6 @@ namespace TourMVC.Controllers
             return context.TourDoan.Any(e => e.DoanId == id);
         }
 
-        // GET: TourDoans/AddKhachHang
         public IActionResult AddKhachHang(int id)
         {
             if (id == null)
@@ -251,18 +245,17 @@ namespace TourMVC.Controllers
 
             DoanKhachHang doanKhach = new DoanKhachHang();
             doanKhach.DoanId = doan.DoanId;
-            
+
             return View(doanKhach);
         }
 
-        // POST: TourDoans/AddKhachHang
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddKhachHang([Bind("DoanKhachHangId,KhachHangId,NgayTao")] DoanKhachHang doanKhachHang)
         {
             if (ModelState.IsValid)
             {
-                doanKhachHang.DoanId = (int) doanId;
+                doanKhachHang.DoanId = (int)doanId;
                 context.Add(doanKhachHang);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = doanKhachHang.DoanId });
@@ -273,12 +266,11 @@ namespace TourMVC.Controllers
             {
                 return NotFound();
             }
-            
+
             ViewData["DoanId"] = doan.DoanTen;
             ViewData["KhachHangId"] = new SelectList(context.TourKhachHang, "KhachHangId", "KhachHangTen", doanKhachHang.KhachHangId);
             return View(doanKhachHang);
         }
-
 
         public async Task<IActionResult> DetailsKhachHang(int? id)
         {
@@ -298,7 +290,6 @@ namespace TourMVC.Controllers
             return View(tourKhachHang);
         }
 
-        // GET: TourDoans/DeleteKhachHang/5
         public async Task<IActionResult> DeleteKhachHang(int? id)
         {
             if (id == null)
@@ -318,7 +309,6 @@ namespace TourMVC.Controllers
             return View(doanKhachHang);
         }
 
-        // POST:  TourDoans/DeleteKhachHang/5
         [HttpPost, ActionName("DeleteKhachHang")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteKhachHang(int id)
@@ -343,11 +333,11 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
             var tourDoanNhanVien = from dnv in context.TourNhanVien
-                               where !((from nv in context.DoanNhanVien
-                                       where nv.DoanId.Equals(id)
-                                       select nv.NhanVienId).Contains(dnv.NhanVienId)
-                                       )
-                               select dnv;
+                                   where !((from nv in context.DoanNhanVien
+                                            where nv.DoanId.Equals(id)
+                                            select nv.NhanVienId).Contains(dnv.NhanVienId)
+                                           )
+                                   select dnv;
             ViewData["DoanId"] = doan.DoanTen;
             ViewData["NhanVienId"] = new SelectList(tourDoanNhanVien, "NhanVienId", "NhanVienTen");
 
@@ -356,7 +346,6 @@ namespace TourMVC.Controllers
             return View(doanNhanVien);
         }
 
-        // POST: DoanNhanViens/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddNhanVien([Bind("DoanNhanVienId,NhanVienId,NhanVienNhiemVu,NgayTao")] DoanNhanVien doanNhanVien)
@@ -398,7 +387,6 @@ namespace TourMVC.Controllers
             return View(doanNhanVien);
         }
 
-        // POST: TourDoans/EditNhanVien/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditNhanVien(int id, [Bind("DoanNhanVienId,NhanVienNhiemVu,NgayTao")] DoanNhanVien doanNhanVien)
@@ -437,7 +425,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
             ViewData["DoanId"] = doanNhanVien.Doan.DoanTen;
-            ViewData["NhanVienId"] = doanNhanVien.NhanVien.NhanVienTen; 
+            ViewData["NhanVienId"] = doanNhanVien.NhanVien.NhanVienTen;
             return View(doanNhanVien);
         }
 
@@ -538,7 +526,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            ViewData["DoanId"] = doan.DoanTen; 
+            ViewData["DoanId"] = doan.DoanTen;
             ViewData["LoaiChiPhiId"] = new SelectList(context.TourLoaiChiPhi, "LoaiChiPhiId", "LoaiChiPhiTen", tourChiPhiChiTiet.LoaiChiPhiId);
             return View(tourChiPhiChiTiet);
         }
@@ -551,12 +539,12 @@ namespace TourMVC.Controllers
             }
 
             var chiPhiChiTiet = await context.TourChiPhiChiTiet.Include(tcpct => tcpct.Doan).Include(tcpct => tcpct.LoaiChiPhi).FirstOrDefaultAsync(tcpct => tcpct.ChiPhiChiTietId == id);
-            
+
             if (chiPhiChiTiet == null)
             {
                 return NotFound();
             }
-            
+
             ViewData["DoanId"] = chiPhiChiTiet.Doan.DoanTen;
             ViewData["LoaiChiPhiId"] = chiPhiChiTiet.LoaiChiPhi.LoaiChiPhiTen;
             return View(chiPhiChiTiet);
@@ -601,7 +589,7 @@ namespace TourMVC.Controllers
             }
 
             ViewData["DoanId"] = chiPhiChiTiet.Doan.DoanTen;
-            ViewData["LoaiChiPhiId"] = chiPhiChiTiet.LoaiChiPhi.LoaiChiPhiTen; 
+            ViewData["LoaiChiPhiId"] = chiPhiChiTiet.LoaiChiPhi.LoaiChiPhiTen;
             return View(tourChiPhiChiTiet);
         }
 
