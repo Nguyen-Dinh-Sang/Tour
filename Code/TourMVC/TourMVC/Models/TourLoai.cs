@@ -13,9 +13,10 @@ namespace TourMVC.Models
 
         public int LoaiId { get; set; }
         [Display(Name = "Tên Loại")]
-        //[Required(ErrorMessage = "Không Được Để Trống")]
+        [Required(ErrorMessage = "Tên Loại Không Được Để Trống")]
         public string LoaiTen { get; set; }
         [Display(Name = "Mô Tả")]
+        [Required(ErrorMessage = "Mô Tả Không Được Để Trống")]
         public string LoaiMoTa { get; set; }
         [Display(Name = "Ngày Tạo")]
         [DataType(DataType.Date)]
