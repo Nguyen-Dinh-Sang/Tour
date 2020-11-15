@@ -15,11 +15,11 @@
     <p>
         <input type="hidden" name="GiaTu" value="0" />
         <input type="hidden" name="GiaDen" value="0" />
-        Classify:
+        Loại Tìm Kiếm:
         <select id="classify" name="classify">
             <option>Tên tour</option>
         </select>
-        Title: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
+        Nội Dung: @Html.TextBox("SearchString") <input type="submit" value="Tìm kiếm" />
     </p>
 }
 @using (Html.BeginForm("Index", "GiaTourHienTais", FormMethod.Get))

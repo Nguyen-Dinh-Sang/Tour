@@ -19,22 +19,22 @@ namespace TourMVC.Controllers
             context = new TourDBContext();
         }
 
-        // GET: TourLoais
         public IActionResult Index(int PageNumber = 1)
         {
             var tourLoais = (from l in context.TourLoai
-                                select l).OrderBy(x => x.LoaiTen);
+                             select l).OrderBy(x => x.LoaiTen);
             ViewBag.TotalPages = Math.Ceiling(tourLoais.Count() / 5.0);
             var listTourLoai = tourLoais.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourLoai);
         }
+
         [HttpGet]
         public IActionResult Index(string classify, string searchString, int PageNumber = 1)
         {
 
             IEnumerable<TourLoai> listTourLoai;
             var tourLoais = (from l in context.TourLoai
-                                select l).OrderBy(x => x.LoaiTen);
+                             select l).OrderBy(x => x.LoaiTen);
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourLoais.Count() / 5.0);
             if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên loại") == true)
@@ -55,11 +55,10 @@ namespace TourMVC.Controllers
                 ViewBag.TotalPages = Math.Ceiling(listTourLoai.Count() / 5.0);
                 return View(listTourLoai.Skip((PageNumber - 1) * 5).Take(5).ToList());
             }
-            
+
             return View(tourLoais.Skip((PageNumber - 1) * 5).Take(5).ToList());
         }
 
-        // GET: TourLoais/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -78,7 +77,6 @@ namespace TourMVC.Controllers
             return View(tourLoai);
         }
 
-        // GET: TourLoais/Create
         public IActionResult Create()
         {
             return View();
@@ -97,7 +95,6 @@ namespace TourMVC.Controllers
             return View(tourLoai);
         }
 
-        // GET: TourLoais/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -145,7 +142,6 @@ namespace TourMVC.Controllers
             return View(tourLoai);
         }
 
-        // GET: TourLoais/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -163,7 +159,6 @@ namespace TourMVC.Controllers
             return View(tourLoai);
         }
 
-        // POST: TourLoais/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -179,7 +174,6 @@ namespace TourMVC.Controllers
             return context.TourLoai.Any(e => e.LoaiId == id);
         }
 
-        // GET: TourLoais/EditTour/5
         public async Task<IActionResult> EditTour(int? id)
         {
             if (id == null)
@@ -197,7 +191,6 @@ namespace TourMVC.Controllers
             return View(tour);
         }
 
-        // POST: TourLoais/EditTour/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditTour(int id, [Bind("TourId,TourTen,TourMoTa,LoaiId,NgayTao")] Tour tour)
@@ -236,7 +229,6 @@ namespace TourMVC.Controllers
             return context.Tour.Any(e => e.TourId == id);
         }
 
-        // GET: TourLoais/DeleteTour/5
         public async Task<IActionResult> DeleteTour(int? id)
         {
             if (id == null)
@@ -255,7 +247,6 @@ namespace TourMVC.Controllers
             return View(tour);
         }
 
-        // POST: TourLoais/DeleteTour/5
         [HttpPost, ActionName("DeleteTour")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteTourConfirmed(int id)
@@ -263,7 +254,7 @@ namespace TourMVC.Controllers
             var tour = await context.Tour.FindAsync(id);
             context.Tour.Remove(tour);
             await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details),new { id = tour.LoaiId });
+            return RedirectToAction(nameof(Details), new { id = tour.LoaiId });
         }
     }
 }
