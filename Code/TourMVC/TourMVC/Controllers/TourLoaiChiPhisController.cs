@@ -11,16 +11,16 @@ namespace TourMVC.Controllers
 {
     public class TourLoaiChiPhisController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
 
         public TourLoaiChiPhisController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TourLoaiChiPhi.ToListAsync());
+            return View(await context.TourLoaiChiPhi.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -30,7 +30,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourLoaiChiPhi = await _context.TourLoaiChiPhi
+            var tourLoaiChiPhi = await context.TourLoaiChiPhi
                 .FirstOrDefaultAsync(m => m.LoaiChiPhiId == id);
             if (tourLoaiChiPhi == null)
             {
@@ -51,8 +51,8 @@ namespace TourMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tourLoaiChiPhi);
-                await _context.SaveChangesAsync();
+                context.Add(tourLoaiChiPhi);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tourLoaiChiPhi);
@@ -65,7 +65,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourLoaiChiPhi = await _context.TourLoaiChiPhi.FindAsync(id);
+            var tourLoaiChiPhi = await context.TourLoaiChiPhi.FindAsync(id);
             if (tourLoaiChiPhi == null)
             {
                 return NotFound();
@@ -86,8 +86,8 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tourLoaiChiPhi);
-                    await _context.SaveChangesAsync();
+                    context.Update(tourLoaiChiPhi);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -112,7 +112,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourLoaiChiPhi = await _context.TourLoaiChiPhi
+            var tourLoaiChiPhi = await context.TourLoaiChiPhi
                 .FirstOrDefaultAsync(m => m.LoaiChiPhiId == id);
             if (tourLoaiChiPhi == null)
             {
@@ -126,15 +126,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tourLoaiChiPhi = await _context.TourLoaiChiPhi.FindAsync(id);
-            _context.TourLoaiChiPhi.Remove(tourLoaiChiPhi);
-            await _context.SaveChangesAsync();
+            var tourLoaiChiPhi = await context.TourLoaiChiPhi.FindAsync(id);
+            context.TourLoaiChiPhi.Remove(tourLoaiChiPhi);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourLoaiChiPhiExists(int id)
         {
-            return _context.TourLoaiChiPhi.Any(e => e.LoaiChiPhiId == id);
+            return context.TourLoaiChiPhi.Any(e => e.LoaiChiPhiId == id);
         }
     }
 }

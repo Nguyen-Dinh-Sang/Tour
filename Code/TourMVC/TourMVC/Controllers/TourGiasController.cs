@@ -11,16 +11,17 @@ namespace TourMVC.Controllers
 {
     public class TourGiasController : Controller
     {
-        private readonly TourDBContext _context;
+        private readonly TourDBContext context;
+        private static int? tourId;
 
         public TourGiasController()
         {
-            _context = new TourDBContext();
+            context = new TourDBContext();
         }
 
         public IActionResult Index(int PageNumber = 1)
         {
-            var tourDBContext = _context.TourGia.Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
+            var tourDBContext = context.TourGia.Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
             ViewBag.TotalPages = Math.Ceiling(tourDBContext.Count() / 5.0);
             var listTourGia = tourDBContext.Skip((PageNumber - 1) * 5).Take(5).ToList();
             return View(listTourGia);
@@ -31,14 +32,14 @@ namespace TourMVC.Controllers
         {
 
             IEnumerable<TourGia> listTourGia;
-            var tourGias = (from l in _context.TourGia
+            var tourGias = (from l in context.TourGia
                             select l).Include(t => t.Tour).OrderBy(x => x.Tour.TourTen);
-            var tourGiaNotUse = from tgnu in _context.TourGia
-                                where !((from tght in _context.GiaTourHienTai
+            var tourGiaNotUse = from tgnu in context.TourGia
+                                where !((from tght in context.GiaTourHienTai
                                          select tght.GiaId).Contains(tgnu.GiaId))
                                 select tgnu;
             ViewBag.tourGiaNotUse = tourGiaNotUse.ToList();
-            ViewBag.tourGiaTenTour = _context.Tour;
+            ViewBag.tourGiaTenTour = context.Tour;
             ViewBag.PageNumber = PageNumber;
             ViewBag.TotalPages = Math.Ceiling(tourGias.Count() / 5.0);
             if (!String.IsNullOrEmpty(searchString) && classify.Contains("Tên tour") == true)
@@ -73,7 +74,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourGia = await _context.TourGia
+            var tourGia = await context.TourGia
                 .Include(t => t.Tour)
                 .FirstOrDefaultAsync(m => m.GiaId == id);
             if (tourGia == null)
@@ -86,7 +87,7 @@ namespace TourMVC.Controllers
 
         public IActionResult Create()
         {
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourTen");
+            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen");
             return View();
         }
 
@@ -96,11 +97,11 @@ namespace TourMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tourGia);
-                await _context.SaveChangesAsync();
+                context.Add(tourGia);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourTen", tourGia.TourId);
+            ViewData["TourId"] = new SelectList(context.Tour, "TourId", "TourTen", tourGia.TourId);
             return View(tourGia);
         }
 
@@ -111,18 +112,22 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourGia = await _context.TourGia.FindAsync(id);
+            var tourGia = await context.TourGia.FindAsync(id);
             if (tourGia == null)
             {
                 return NotFound();
             }
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa", tourGia.TourId);
+
+            tourId = tourGia.TourId;
+            var tour = await context.Tour.FindAsync(tourGia.TourId);
+
+            ViewData["TourId"] = tour.TourTen;
             return View(tourGia);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GiaId,GiaSoTien,TourId,GiaTuNgay,GiaDenNgay,NgayTao")] TourGia tourGia)
+        public async Task<IActionResult> Edit(int id, [Bind("GiaId,GiaSoTien,GiaTuNgay,GiaDenNgay,NgayTao")] TourGia tourGia)
         {
             if (id != tourGia.GiaId)
             {
@@ -133,8 +138,9 @@ namespace TourMVC.Controllers
             {
                 try
                 {
-                    _context.Update(tourGia);
-                    await _context.SaveChangesAsync();
+                    tourGia.TourId = (int) tourId;
+                    context.Update(tourGia);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -149,7 +155,9 @@ namespace TourMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TourId"] = new SelectList(_context.Tour, "TourId", "TourMoTa", tourGia.TourId);
+            var tour = await context.Tour.FindAsync(tourId);
+
+            ViewData["TourId"] = tour.TourTen;
             return View(tourGia);
         }
 
@@ -160,7 +168,7 @@ namespace TourMVC.Controllers
                 return NotFound();
             }
 
-            var tourGia = await _context.TourGia
+            var tourGia = await context.TourGia
                 .Include(t => t.Tour)
                 .FirstOrDefaultAsync(m => m.GiaId == id);
             if (tourGia == null)
@@ -175,15 +183,15 @@ namespace TourMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tourGia = await _context.TourGia.FindAsync(id);
-            _context.TourGia.Remove(tourGia);
-            await _context.SaveChangesAsync();
+            var tourGia = await context.TourGia.FindAsync(id);
+            context.TourGia.Remove(tourGia);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TourGiaExists(int id)
         {
-            return _context.TourGia.Any(e => e.GiaId == id);
+            return context.TourGia.Any(e => e.GiaId == id);
         }
     }
 }
