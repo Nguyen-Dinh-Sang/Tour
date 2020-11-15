@@ -84,6 +84,9 @@ namespace TourMVC.Controllers
 
             var tourKhachHang = await context.TourKhachHang
                 .FirstOrDefaultAsync(m => m.KhachHangId == id);
+
+            context.Entry(tourKhachHang).Collection(kh => kh.DoanKhachHang).Query().Include(dkh => dkh.Doan).Include(d => d.Doan.Tour).OrderBy(dkh => dkh.NgayTao).Load();
+
             if (tourKhachHang == null)
             {
                 return NotFound();

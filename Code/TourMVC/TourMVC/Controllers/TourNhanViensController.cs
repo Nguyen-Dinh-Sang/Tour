@@ -75,6 +75,9 @@ namespace TourMVC.Controllers
 
             var tourNhanVien = await context.TourNhanVien
                 .FirstOrDefaultAsync(m => m.NhanVienId == id);
+
+            context.Entry(tourNhanVien).Collection(nv => nv.DoanNhanVien).Query().Include(dnv => dnv.Doan).Include(d => d.Doan.Tour).OrderBy(dnv => dnv.NgayTao).Load();
+
             if (tourNhanVien == null)
             {
                 return NotFound();
