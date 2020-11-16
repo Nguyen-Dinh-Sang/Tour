@@ -24,9 +24,11 @@ namespace TourMVC.Models
         [Display(Name = "Ngày Sinh")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Ngày Sinh Không Được Để Trống")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime NhanVienNgaySinh { get; set; }
         [Display(Name = "Ngày Tạo")]
         [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? NgayTao { get; set; }
 
         public virtual ICollection<DoanNhanVien> DoanNhanVien { get; set; }

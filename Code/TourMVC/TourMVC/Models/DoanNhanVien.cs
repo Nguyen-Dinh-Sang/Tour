@@ -15,6 +15,7 @@ namespace TourMVC.Models
         public string NhanVienNhiemVu { get; set; }
         [Display(Name = "Ngày Tạo")]
         [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? NgayTao { get; set; }
 
         [Display(Name = "Đoàn")]
