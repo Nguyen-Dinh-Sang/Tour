@@ -17,7 +17,9 @@
             var html = '<select asp-for="GiaId" name="GiaId" class="form-control">';
             $.each(result, function () {
                 var item = this;
-                html += '<option value="' + item.giaId + '"> ' + item.giaTuNgay + ' </option>';
+                var spl = item.giaTuNgay.split('T');
+                var date = new Date(spl[0]);
+                html += '<option value="' + item.giaId + '"> ' + parseInt(date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' </option>';
             })
             html += '</select>';
             $("#result").html(html);
@@ -45,7 +47,9 @@ function loadResult()
             var html = '<select asp-for="GiaId" name="GiaId" class="form-control">';
             $.each(result, function () {
                 var item = this;
-                html += '<option value="' + item.giaId + '"> ' + item.giaTuNgay + ' </option>';
+                var spl = item.giaTuNgay.split('T');
+                var date = new Date(spl[0]);
+                html += '<option value="' + item.giaId + '"> ' + parseInt(date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' </option>';
             })
             html += '</select>';
             $("#result").html(html);
@@ -102,6 +106,54 @@ function loadchangeDoanGiaTour() {
             $("#changeDoanGiaTour").val(html);
         }
     });
+}
+function hienthi_ds_khach_hang() {
+  
+    var tmp = $("#btn_ds_khach_hang").val();
+    if (tmp == "Xem danh sách") {
+     
+        document.getElementById("ds_khach_hang").style.display = 'block';
+        document.getElementById("btn_ds_khach_hang").value = "Ẩn danh sách";
+        
+    }
+    else {
+     
+        document.getElementById("ds_khach_hang").style.display = 'none';
+        document.getElementById("btn_ds_khach_hang").value = "Xem danh sách";
+        
+    }
+}
+function hienthi_ds_nhan_vien() {
+
+    var tmp = $("#btn_ds_nhan_vien").val();
+    if (tmp == "Xem danh sách") {
+
+        document.getElementById("ds_nhan_vien").style.display = 'block';
+        document.getElementById("btn_ds_nhan_vien").value = "Ẩn danh sách";
+
+    }
+    else {
+
+        document.getElementById("ds_nhan_vien").style.display = 'none';
+        document.getElementById("btn_ds_nhan_vien").value = "Xem danh sách";
+
+    }
+}
+function hienthi_ds_chi_phi() {
+
+    var tmp = $("#btn_ds_chi_phi").val();
+    if (tmp == "Xem danh sách") {
+
+        document.getElementById("ds_chi_phi").style.display = 'block';
+        document.getElementById("btn_ds_chi_phi").value = "Ẩn danh sách";
+
+    }
+    else {
+
+        document.getElementById("ds_chi_phi").style.display = 'none';
+        document.getElementById("btn_ds_chi_phi").value = "Xem danh sách";
+
+    }
 }
 window.onload = function(){
     loadResult();
