@@ -24,8 +24,5 @@ namespace TourMVC.Models
 
         [Display(Name = "Tổng Chi Phí")]
         public decimal TongChiPhi { get; set; }
-
-        [Display(Name = "Tổng Lợi Nhuận")]
-        public decimal TongLoiNhuan { get; set; }
     }
 }
