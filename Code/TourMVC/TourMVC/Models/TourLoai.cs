@@ -20,6 +20,7 @@ namespace TourMVC.Models
         public string LoaiMoTa { get; set; }
         [Display(Name = "Ngày Tạo")]
         [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? NgayTao { get; set; }
 
         public virtual ICollection<Tour> Tour { get; set; }

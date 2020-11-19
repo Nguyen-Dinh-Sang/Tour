@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace TourMVC.Models
 {
-    public partial class ThongKeTour
+    public partial class ThongKeDoan
     {
-        public ThongKeTour()
+        public ThongKeDoan()
         {
         }
 
-        public int TourId { get; set; }
-        [Display(Name = "Tour")]
-        public string TourTen { get; set; }
+        public int DoanId { get; set; }
+        [Display(Name = "Đoàn")]
+        public string DoanTen { get; set; }
 
-        [Display(Name = "Tổng Số Đoàn Đi")]
-        public int TongSoDoan { get; set; }
+        [Display(Name = "Số Lượng Khách")]
+        public int SoLuongKhach { get; set; }
+
+        [Display(Name = "Giá Tour")]
+        public decimal? GiaTien { get; set; }
 
         [Display(Name = "Tổng Doanh Thu")]
         public decimal? TongDoanhThu { get; set; }

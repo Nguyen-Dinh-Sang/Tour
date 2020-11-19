@@ -91,6 +91,7 @@ namespace TourMVC.Controllers
                 .FirstOrDefaultAsync(m => m.TourId == id);
             context.Entry(tour).Collection(t => t.TourChiTiet).Query().Include(tct => tct.DiaDiem).OrderBy(tct => tct.ChiTietThuTu).Load();
             // context.Entry(tour).Reference(t => t.TourChiTiet.Select(tct => tct.DiaDiem)).Load();
+            context.Entry(tour).Collection(t => t.TourDoan).Query().OrderBy(d => d.NgayTao).Load();
             if (tour == null)
             {
                 return NotFound();

@@ -20,13 +20,16 @@ namespace TourMVC.Models
         [Display(Name = "Giá Từ Ngày")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Ngày Bắt Đầu Không Được Để Trống")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime GiaTuNgay { get; set; }
         [Display(Name = "Giá Đến Ngày")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Ngày Kết Thúc Không Được Để Trống")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime GiaDenNgay { get; set; }
         [Display(Name = "Ngày Tạo")]
         [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? NgayTao { get; set; }
 
         public virtual Tour Tour { get; set; }

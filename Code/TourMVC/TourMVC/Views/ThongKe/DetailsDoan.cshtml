@@ -1,0 +1,216 @@
+﻿@model TourMVC.Models.TourDoan
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chi Tiết</h1>
+
+<div>
+    <h4>@Model.DoanTen</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanTen)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoanTen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanChiTiet)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoanChiTiet)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanNgayDi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoanNgayDi)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanNgayVe)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoanNgayVe)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tour)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tour.TourTen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoanGiaTour)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoanGiaTour)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NgayTao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NgayTao)
+        </dd>
+        <dt class="col-sm-2">
+            Danh Sách Khách Hàng
+        </dt>
+        <div class="col-sm-10">
+            <div><input type="button" id="btn_ds_khach_hang" name="btn_ds_khach_hang" value="Xem danh sách" onclick="hienthi_ds_khach_hang()" /></div>
+            <div id="ds_khach_hang" style="display:none">
+                <dd id="table_khach_hang">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Họ Và Tên
+                                </th>
+                                <th>
+                                    Số Điện Thoại
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Ngày Tạo
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.DoanKhachHang)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.KhachHang.KhachHangTen)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.KhachHang.KhachHangSoDienThoai)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.KhachHang.KhachHangEmail)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NgayTao)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </dd>
+            </div>
+        </div>
+
+        <dt class="col-sm-2">
+            Danh Sách Nhân Viên
+        </dt>
+        <div class="col-sm-10">
+            <div>
+                <input type="button" id="btn_ds_nhan_vien" name="btn_ds_nhan_vien" value="Xem danh sách" onclick="hienthi_ds_nhan_vien()" />
+            </div>
+            <div id="ds_nhan_vien" style="display:none">
+                <dd>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Họ Và Tên
+                                </th>
+                                <th>
+                                    Số Điện Thoại
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Nhiệm Vụ
+                                </th>
+                                <th>
+                                    Ngày Tạo
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.DoanNhanVien)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NhanVien.NhanVienTen)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NhanVien.NhanVienSoDienThoai)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NhanVien.NhanVienEmail)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NhanVienNhiemVu)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NgayTao)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </dd>
+            </div>
+        </div>
+        
+        <dt class="col-sm-2">
+            Danh Sách Chi Phí
+        </dt>
+        <div class="col-sm-10">
+            <div>
+                <input type="button" id="btn_ds_chi_phi" name="btn_ds_chi_phi" value="Xem danh sách" onclick="hienthi_ds_chi_phi()" />
+            </div>
+            <div id="ds_chi_phi" style="display:none">
+                <dd>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Loại Chi Phí
+                                </th>
+                                <th>
+                                    Chi Phí
+                                </th>
+                                <th>
+                                    Ngày Tạo
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.TourChiPhiChiTiet)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LoaiChiPhi.LoaiChiPhiTen)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ChiPhi)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NgayTao)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </dd>
+            </div>
+        </div>
+        
+        <dt class="col-sm-2" style="color:red;">
+            Tổng Chi Phí
+        </dt>
+        <dd class="col-sm-10" style="color:red;">
+            @ViewBag.TongChiPhi
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Details" asp-route-id="@Model.DoanId">Trở Về</a>
+</div>
+

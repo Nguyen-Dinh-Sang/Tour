@@ -22,10 +22,12 @@ namespace TourMVC.Models
         [Display(Name = "Ngày Đi")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Ngày Đi Không Được Để Trống")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DoanNgayDi { get; set; }
         [Display(Name = "Ngày Về")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Ngày Về Không Được Để Trống")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DoanNgayVe { get; set; }
         [Display(Name = "Chi Tiết Đoàn")]
         [Required(ErrorMessage = "Chi Tiết Không Được Để Trống")]
@@ -34,6 +36,7 @@ namespace TourMVC.Models
         public decimal DoanGiaTour { get; set; }
         [Display(Name = "Ngày Tạo")]
         [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? NgayTao { get; set; }
 
         public virtual Tour Tour { get; set; }
