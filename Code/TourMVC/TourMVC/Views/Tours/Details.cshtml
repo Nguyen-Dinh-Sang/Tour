@@ -83,6 +83,55 @@
             </table>
             <a asp-action="CreateTourChiTiet" asp-route-id="@Model.TourId">Thêm Địa Điểm</a>
         </dd>
+        <dt class="col-sm-2">
+            Các Đoàn Đã Đi
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Đoàn
+                        </th>
+                        <th>
+                            Ngày Đi
+                        </th>
+                        <th>
+                            Ngày Về
+                        </th>
+                        <th>
+                            Giá Tour
+                        </th>
+                        <th>
+                            Ngày Tạo
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TourDoan)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DoanTen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DoanNgayDi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DoanNgayVe)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DoanGiaTour)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NgayTao)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </dd>
     </dl>
 </div>
 <div>

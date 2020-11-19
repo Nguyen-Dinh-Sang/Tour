@@ -1,20 +1,23 @@
-﻿@model IEnumerable<TourMVC.Models.ThongKeTour>
+﻿@model IEnumerable<TourMVC.Models.ThongKeDoan>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Doanh Thu Tour</h1>
+    <h1>Doanh Thu Tour @ViewBag.Tour</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TourTen)
+                @Html.DisplayNameFor(model => model.DoanTen)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TongSoDoan)
+                @Html.DisplayNameFor(model => model.SoLuongKhach)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GiaTien)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TongDoanhThu)
@@ -33,10 +36,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TourTen)
+                    @Html.DisplayFor(modelItem => item.DoanTen)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TongSoDoan)
+                    @Html.DisplayFor(modelItem => item.SoLuongKhach)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GiaTien)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TongDoanhThu)
@@ -56,26 +62,30 @@
                     }
                 }
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.TourId">Chi Tiết</a>
+                    <a asp-action="DetailsDoan" asp-route-id="@item.DoanId">Chi Tiết</a>
                 </td>
             </tr>
         }
-        <tr>
-            <td style="color:red;">
-                Tổng
-            </td>
-            <td style="color:red;">
-                @ViewBag.TongSoDoan
-            </td>
-            <td style="color:red;">
-                @ViewBag.TongDoanhThu
-            </td>
-            <td style="color:red;">
-                @ViewBag.TongChiPhi
-            </td>
-            <td style="color:red;">
-                @ViewBag.TongLoiNhuan
-            </td>
-        </tr>
+    <tr>
+        <td style="color:red;">
+            Tổng
+        </td>
+        <td style="color:red;">
+            @ViewBag.TongSoKhach
+        </td>
+        <td></td>
+        <td style="color:red;">
+            @ViewBag.TongDoanhThu
+        </td>
+        <td style="color:red;">
+            @ViewBag.TongChiPhi
+        </td>
+        <td style="color:red;">
+            @ViewBag.TongLoiNhuan
+        </td>
+    </tr>
     </tbody>
 </table>
+<div>
+    <a asp-action="Index">Trở Về</a>
+</div>
