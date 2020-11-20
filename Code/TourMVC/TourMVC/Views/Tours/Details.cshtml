@@ -38,100 +38,117 @@
         <dt class="col-sm-2">
             Các Địa Điểm
         </dt>
-        <dd class="col-sm-10">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            Thành Phố
-                        </th>
-                        <th>
-                            Tên Địa Điểm
-                        </th>
-                        <th>
-                            Ngày Tạo
-                        </th>
-                        <th>
-                            Thứ Tự
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.TourChiTiet)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemThanhPho)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemTen)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.NgayTao)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ChiTietThuTu)
-                            </td>
-                            <td>
-                                <a asp-action="EditTourChiTiet" asp-route-id="@item.ChiTietId">Chỉnh Sửa Thứ Tự</a> |
-                                <a asp-action="DeleteTourChiTiet" asp-route-id="@item.ChiTietId">Xóa</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <a asp-action="CreateTourChiTiet" asp-route-id="@Model.TourId">Thêm Địa Điểm</a>
-        </dd>
+        <div class="col-sm-10" style="margin-top:10px">
+            <div>
+                <input type="button" id="btn_ds_dia_diem" name="btn_ds_dia_diem" value="Xem danh sách" onclick="hienthi_ds_dia_diem()" />
+            </div>
+            <div id="ds_dia_diem" style="display:none">
+
+                <dd id="table_ds_dia_diem" >
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Thành Phố
+                                </th>
+                                <th>
+                                    Tên Địa Điểm
+                                </th>
+                                <th>
+                                    Ngày Tạo
+                                </th>
+                                <th>
+                                    Thứ Tự
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.TourChiTiet)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemThanhPho)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DiaDiem.DiaDiemTen)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NgayTao)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ChiTietThuTu)
+                                    </td>
+                                    <td>
+                                        <a asp-action="EditTourChiTiet" asp-route-id="@item.ChiTietId">Chỉnh Sửa Thứ Tự</a> |
+                                        <a asp-action="DeleteTourChiTiet" asp-route-id="@item.ChiTietId">Xóa</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <a asp-action="CreateTourChiTiet" asp-route-id="@Model.TourId">Thêm Địa Điểm</a>
+                </dd>
+            </div>
+        </div>
+        
         <dt class="col-sm-2">
             Các Đoàn Đã Đi
         </dt>
-        <dd class="col-sm-10">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            Đoàn
-                        </th>
-                        <th>
-                            Ngày Đi
-                        </th>
-                        <th>
-                            Ngày Về
-                        </th>
-                        <th>
-                            Giá Tour
-                        </th>
-                        <th>
-                            Ngày Tạo
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.TourDoan)
-                    {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DoanTen)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DoanNgayDi)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DoanNgayVe)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DoanGiaTour)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NgayTao)
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </dd>
+        <div class="col-sm-10" style="margin-top:10px">
+            <div>
+                <input type="button" id="btn_ds_doan_da_di" name="btn_ds_doan_da_di" value="Xem danh sách" onclick="hienthi_ds_doan_da_di()" />
+            </div>
+            <div id="ds_doan_da_di" style="display:none">
+                <dd id="table_doan_da_di" >
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Đoàn
+                                </th>
+                                <th>
+                                    Ngày Đi
+                                </th>
+                                <th>
+                                    Ngày Về
+                                </th>
+                                <th>
+                                    Giá Tour
+                                </th>
+                                <th>
+                                    Ngày Tạo
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.TourDoan)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DoanTen)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DoanNgayDi)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DoanNgayVe)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DoanGiaTour)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NgayTao)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </dd>
+            </div>
+        </div>
+        
     </dl>
 </div>
 <div>

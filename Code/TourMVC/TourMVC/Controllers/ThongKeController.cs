@@ -19,27 +19,31 @@ namespace TourMVC.Controllers
             context = new TourDBContext();
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int PageNumber = 1)
         {
 
             var queryTour_Doan = (
                 from t in context.Tour
                 join td in context.TourDoan on t.TourId equals td.TourId into t_td_join
+                 
                 from t_td in t_td_join.DefaultIfEmpty()
+               
                 select new
                 {
                     TourId = t.TourId,
                     TourTen = t.TourTen,
                     DoanId = t_td.DoanId,
                     NgayTao = t_td.NgayTao,
+                    NgayDi=t_td.DoanNgayDi,
                     Gia = t_td.DoanGiaTour
                 }
-                );
+                ); ;
 
             // lọc khúc này là ổn rồi
 
             var queryDoanKhachHang = (
                     from dkh in context.DoanKhachHang
+                  
                     group new { dkh } by new
                     {
                         dkh.DoanId
@@ -63,11 +67,14 @@ namespace TourMVC.Controllers
                         TongChiPhi = (decimal?)g.Sum(cp => cp.cp.ChiPhi)
                     }
                 );
-
+            DateTime ngaybatdau = DateTime.Parse("20/10/2020");
+            DateTime ketthuc = DateTime.Parse("19/11/2020");
             var queryDoan_KhachHang = (
                     from td in queryTour_Doan
                     join kh in queryDoanKhachHang on td.DoanId equals kh.DoanId into td_kh_join
+                   
                     from td_kh in td_kh_join.DefaultIfEmpty()
+                    where td.NgayDi >= ngaybatdau && td.NgayDi<=ketthuc
                     select new
                     {
 
@@ -143,10 +150,223 @@ namespace TourMVC.Controllers
             ViewData["TongDoanhThu"] = tongDoanhThu;
             ViewData["TongChiPhi"] = tongChiPhi;
             ViewData["TongLoiNhuan"] = (tongDoanhThu - tongChiPhi);
-
-            return View(queryCuoiCung);
+            ViewBag.tourDoanTenTour = context.Tour;
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(queryCuoiCung.Count() / 5.0);
+            var listQueryCuoiCung = queryCuoiCung.Skip((PageNumber - 1) * 5).Take(5).ToList();  
+            return View(listQueryCuoiCung);
+          
         }
+        [HttpGet]
+        public IActionResult Index(string searchString, string NgayBatDau, string NgayKetThuc, int PageNumber = 1)
+        {
+            ViewBag.tourDoanTenTour = context.Tour;
+            var queryTour_Doan = (
+                from t in context.Tour
+                join td in context.TourDoan on t.TourId equals td.TourId into t_td_join
 
+                from t_td in t_td_join.DefaultIfEmpty()
+
+                select new
+                {
+                    TourId = t.TourId,
+                    TourTen = t.TourTen,
+                    DoanId = t_td.DoanId,
+                    NgayTao = t_td.NgayTao,
+                    NgayDi = t_td.DoanNgayDi,
+                    Gia = t_td.DoanGiaTour
+                }
+                ); ;
+
+            // lọc khúc này là ổn rồi
+
+            var queryDoanKhachHang = (
+                    from dkh in context.DoanKhachHang
+
+                    group new { dkh } by new
+                    {
+                        dkh.DoanId
+                    } into g
+                    select new
+                    {
+                        DoanId = g.Key.DoanId,
+                        SoLuongKhach = g.Count()
+                    }
+                );
+
+            var queryChiPhi = (
+                    from cp in context.TourChiPhiChiTiet
+                    group new { cp } by new
+                    {
+                        cp.DoanId
+                    } into g
+                    select new
+                    {
+                        DoanId = g.Key.DoanId,
+                        TongChiPhi = (decimal?)g.Sum(cp => cp.cp.ChiPhi)
+                    }
+                );
+
+            var queryDoan_KhachHang = (
+                    from td in queryTour_Doan
+                    join kh in queryDoanKhachHang on td.DoanId equals kh.DoanId into td_kh_join
+
+                    from td_kh in td_kh_join.DefaultIfEmpty()
+                    select new
+                    {
+
+                        TourId = td.TourId,
+                        TourTen = td.TourTen,
+                        DoanId = td.DoanId,
+                        Gia = td.Gia,
+                        SoLuongKhach = td_kh.SoLuongKhach
+                    }
+                );
+            if (!String.IsNullOrEmpty(NgayBatDau) && String.IsNullOrEmpty(NgayKetThuc))
+            {
+                DateTime ngaybatdau = DateTime.Parse(NgayBatDau);
+                
+                queryDoan_KhachHang = (
+                    from td in queryTour_Doan
+                    join kh in queryDoanKhachHang on td.DoanId equals kh.DoanId into td_kh_join
+
+                    from td_kh in td_kh_join.DefaultIfEmpty()
+                    where td.NgayDi >= ngaybatdau 
+                    select new
+                    {
+
+                        TourId = td.TourId,
+                        TourTen = td.TourTen,
+                        DoanId = td.DoanId,
+                        Gia = td.Gia,
+                        SoLuongKhach = td_kh.SoLuongKhach
+                    }
+                );
+            }
+            if (String.IsNullOrEmpty(NgayBatDau) && !String.IsNullOrEmpty(NgayKetThuc))
+            {
+              
+                DateTime ketthuc = DateTime.Parse(NgayKetThuc);
+                queryDoan_KhachHang = (
+                    from td in queryTour_Doan
+                    join kh in queryDoanKhachHang on td.DoanId equals kh.DoanId into td_kh_join
+
+                    from td_kh in td_kh_join.DefaultIfEmpty()
+                    where td.NgayDi <= ketthuc
+                    select new
+                    {
+
+                        TourId = td.TourId,
+                        TourTen = td.TourTen,
+                        DoanId = td.DoanId,
+                        Gia = td.Gia,
+                        SoLuongKhach = td_kh.SoLuongKhach
+                    }
+                );
+            }
+            if (!String.IsNullOrEmpty(NgayBatDau) && !String.IsNullOrEmpty(NgayKetThuc))
+            {
+                DateTime ngaybatdau = DateTime.Parse(NgayBatDau);
+                DateTime ketthuc = DateTime.Parse(NgayKetThuc);
+                queryDoan_KhachHang = (
+                    from td in queryTour_Doan
+                    join kh in queryDoanKhachHang on td.DoanId equals kh.DoanId into td_kh_join
+
+                    from td_kh in td_kh_join.DefaultIfEmpty()
+                    where td.NgayDi >= ngaybatdau && td.NgayDi <= ketthuc
+                    select new
+                    {
+
+                        TourId = td.TourId,
+                        TourTen = td.TourTen,
+                        DoanId = td.DoanId,
+                        Gia = td.Gia,
+                        SoLuongKhach = td_kh.SoLuongKhach
+                    }
+                );
+            }
+
+            var queryDoan_KhachHang_ChiPhi = (
+                    from tdkh in queryDoan_KhachHang
+                    join cp in queryChiPhi on tdkh.DoanId equals cp.DoanId into tdkh_cp_join
+                    from tdkh_cp in tdkh_cp_join.DefaultIfEmpty()
+                    select new
+                    {
+                        TourId = tdkh.TourId,
+                        TourTen = tdkh.TourTen,
+                        DoanId = tdkh.DoanId,
+                        Gia = tdkh.Gia,
+                        SoLuongKhach = tdkh.SoLuongKhach,
+                        TongChiPhi = tdkh_cp.TongChiPhi
+                    }
+                );
+
+            var queryDoan_KhachHang_ChiPhi_DoanhThu = (
+                from dkhcp in queryDoan_KhachHang_ChiPhi
+                select new
+                {
+                    TourId = dkhcp.TourId,
+                    TourTen = dkhcp.TourTen,
+                    DoanId = dkhcp.DoanId,
+                    TongDoanhThu = (decimal?)(dkhcp.Gia * dkhcp.SoLuongKhach),
+                    TongChiPhi = dkhcp.TongChiPhi
+                }
+                );
+
+            var queryTour_DoanhThu_ChiPhi = (
+                from dkhcpdt in queryDoan_KhachHang_ChiPhi_DoanhThu
+                where dkhcpdt.DoanId > 0
+                group new { dkhcpdt } by new
+                {
+                    dkhcpdt.TourId
+                } into g
+                select new
+                {
+                    TourId = g.Key.TourId,
+                    TongDoanhThu = (decimal?)g.Sum(dkhcpdt => dkhcpdt.dkhcpdt.TongDoanhThu),
+                    TongChiPhi = (decimal?)g.Sum(dkhcpdt => dkhcpdt.dkhcpdt.TongChiPhi),
+                    TongSoDoan = g.Count()
+                }
+                );
+
+            var queryCuoiCung = (
+                    from t in context.Tour
+                    join tdtcp in queryTour_DoanhThu_ChiPhi on t.TourId equals tdtcp.TourId into t_tdtcp_join
+                    from t_tdtcp in t_tdtcp_join.DefaultIfEmpty()
+                    select new ThongKeTour
+                    {
+                        TourId = t.TourId,
+                        TourTen = t.TourTen,
+                        TongSoDoan = t_tdtcp.TongSoDoan == null ? 0 : t_tdtcp.TongSoDoan,
+                        TongDoanhThu = t_tdtcp.TongDoanhThu == null ? 0 : t_tdtcp.TongDoanhThu,
+                        TongChiPhi = t_tdtcp.TongChiPhi == null ? 0 : t_tdtcp.TongChiPhi
+                    }
+                );
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                queryCuoiCung = from qrcc in queryCuoiCung
+                                where qrcc.TourTen.Contains(searchString)
+                                select qrcc;
+            }
+            var tongDoanhThu = queryCuoiCung.Sum(i => i.TongDoanhThu);
+            var tongChiPhi = queryCuoiCung.Sum(i => i.TongChiPhi);
+
+            ViewData["TongSoDoan"] = queryCuoiCung.Sum(i => i.TongSoDoan);
+            ViewData["TongDoanhThu"] = tongDoanhThu;
+            ViewData["TongChiPhi"] = tongChiPhi;
+            ViewData["TongLoiNhuan"] = (tongDoanhThu - tongChiPhi);
+
+            ViewBag.searchString = searchString;
+            ViewBag.NgayBatDau = NgayBatDau;
+            ViewBag.NgayKetThuc = NgayKetThuc;
+            ViewBag.PageNumber = PageNumber;
+            ViewBag.TotalPages = Math.Ceiling(queryCuoiCung.Count() / 5.0);
+            var listQueryCuoiCung = queryCuoiCung.Skip((PageNumber - 1) * 5).Take(5).ToList();
+            
+            return View(listQueryCuoiCung);
+
+        }
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

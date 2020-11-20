@@ -7,6 +7,33 @@
 
 <h1>Doanh Thu Tour</h1>
 
+@using (Html.BeginForm("Index", "ThongKe", FormMethod.Get))
+{
+    <p>
+        <input type="hidden" name="NgayBatDau" value="" />
+        <input type="hidden" name="NgayKetThuc" value="" />
+        Chọn tên Tour:
+        <select id="SearchString" name="SearchString">
+            @foreach (var item in ViewBag.tourDoanTenTour)
+            {
+                <option>@item.TourTen</option>
+            }
+
+        </select>
+        <input type="submit" value="Xem" />
+    </p>
+}
+@using (Html.BeginForm("Index", "ThongKe", FormMethod.Get))
+{
+    <p>
+        <input type="hidden" name="SearchString" value="" />
+        Ngày Bắt Đầu:
+        <input type="date" id="NgayBatDau" name="NgayBatDau"/>
+         Ngày Kết Thúc:
+        <input type="date" id="NgayKetThuc" name="NgayKetThuc" />   
+        <input type="submit" value="Lọc" />
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -79,3 +106,23 @@
         </tr>
     </tbody>
 </table>
+@{
+    double totalPages = ViewBag.TotalPages;
+    int PageNumber = ViewBag.PageNumber;
+    <div class="pagination" style="float:left">
+        @if (totalPages != 0)
+        {
+            @if (PageNumber > 1)
+            {
+                @Html.ActionLink("<<<", "Index", new { searchString = ViewBag.searchString, NgayBatDau = ViewBag.NgayBatDau, NgayKetThuc = ViewBag.NgayKetThuc, PageNumber = PageNumber - 1 })
+            }
+            <label>@PageNumber</label>
+            @if (PageNumber != totalPages)
+            {
+                @Html.ActionLink(">>>", "Index", new { searchString = ViewBag.searchString, NgayBatDau = ViewBag.NgayBatDau, NgayKetThuc = ViewBag.NgayKetThuc, PageNumber = PageNumber + 1 })
+            }
+        }
+
+    </div>
+
+}
