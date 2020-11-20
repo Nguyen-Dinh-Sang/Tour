@@ -155,6 +155,38 @@ function hienthi_ds_chi_phi() {
 
     }
 }
+function hienthi_ds_dia_diem() {
+
+    var tmp = $("#btn_ds_dia_diem").val();
+    if (tmp == "Xem danh sách") {
+
+        document.getElementById("ds_dia_diem").style.display = 'block';
+        document.getElementById("btn_ds_dia_diem").value = "Ẩn danh sách";
+
+    }
+    else {
+
+        document.getElementById("ds_dia_diem").style.display = 'none';
+        document.getElementById("btn_ds_dia_diem").value = "Xem danh sách";
+
+    }
+}
+function hienthi_ds_doan_da_di() {
+
+    var tmp = $("#btn_ds_doan_da_di").val();
+    if (tmp == "Xem danh sách") {
+
+        document.getElementById("ds_doan_da_di").style.display = 'block';
+        document.getElementById("btn_ds_doan_da_di").value = "Ẩn danh sách";
+
+    }
+    else {
+
+        document.getElementById("ds_doan_da_di").style.display = 'none';
+        document.getElementById("btn_ds_doan_da_di").value = "Xem danh sách";
+
+    }
+}
 window.onload = function(){
     loadResult();
     loadchangeDoanGiaTour();
