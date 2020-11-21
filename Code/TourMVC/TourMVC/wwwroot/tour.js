@@ -107,6 +107,46 @@ function loadchangeDoanGiaTour() {
         }
     });
 }
+function batnolai() {
+    var ngayve = document.getElementById("DoanNgayVe");
+    var ngaydi = document.getElementById("DoanNgayDi");
+    if (ngaydi.value > ngayve.value) {
+        alert("Ngày về không được nhỏ hơn ngày đi.");
+        document.getElementById("DoanNgayVe").value = "";
+    }
+
+}
+function batngaydilai() {
+    var ngayve = document.getElementById("DoanNgayVe");
+    var ngaydi = document.getElementById("DoanNgayDi");
+    if (ngayve.value !="") {
+        if (ngaydi.value > ngayve.value) {
+            alert("Ngày về không được nhỏ hơn ngày đi.");
+            document.getElementById("DoanNgayDi").value = "";
+        }
+    }
+
+}
+function batgiadenngaylai() {
+    var ngayve = document.getElementById("GiaDenNgay");
+    var ngaydi = document.getElementById("GiaTuNgay");
+    if (ngaydi.value > ngayve.value) {
+        alert("Ngày kết thúc không được nhỏ hơn ngày bắt đầu.");
+        document.getElementById("GiaDenNgay").value = "";
+    }
+
+}
+function batgiatungaylai() {
+    var ngayve = document.getElementById("GiaDenNgay");
+    var ngaydi = document.getElementById("GiaTuNgay");
+    if (ngayve.value != "") {
+        if (ngaydi.value > ngayve.value) {
+            alert("Ngày kết thúc không được nhỏ hơn ngày bắt đầu.");
+            document.getElementById("GiaTuNgay").value = "";
+        }
+    }
+
+}
 function hienthi_ds_khach_hang() {
   
     var tmp = $("#btn_ds_khach_hang").val();

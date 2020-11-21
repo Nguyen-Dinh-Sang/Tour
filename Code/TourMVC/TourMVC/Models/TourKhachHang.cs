@@ -20,6 +20,7 @@ namespace TourMVC.Models
         public string KhachHangSoDienThoai { get; set; }
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Email Không Được Để Trống")]
+        [EmailAddress]
         public string KhachHangEmail { get; set; }
         [Display(Name = "Ngày Sinh")]
         [DataType(DataType.Date)]
