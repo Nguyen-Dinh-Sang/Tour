@@ -24,12 +24,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="GiaTuNgay" class="control-label"></label>
-                <input asp-for="GiaTuNgay" class="form-control" />
+                <input asp-for="GiaTuNgay" class="form-control" onchange="batgiatungaylai()" />
                 <span asp-validation-for="GiaTuNgay" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GiaDenNgay" class="control-label"></label>
-                <input asp-for="GiaDenNgay" class="form-control" />
+                <input asp-for="GiaDenNgay" class="form-control" onchange="batgiadenngaylai()" />
                 <span asp-validation-for="GiaDenNgay" class="text-danger"></span>
             </div>
             <div class="form-group">

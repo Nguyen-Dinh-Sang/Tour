@@ -25,12 +25,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="DoanNgayDi" class="control-label"></label>
-                <input asp-for="DoanNgayDi" class="form-control" />
+                <input asp-for="DoanNgayDi" class="form-control" onchange="batngaydilai()" />
                 <span asp-validation-for="DoanNgayDi" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DoanNgayVe" class="control-label"></label>
-                <input asp-for="DoanNgayVe" class="form-control" />
+                <input asp-for="DoanNgayVe"  class="form-control" onchange="batnolai()" />
                 <span asp-validation-for="DoanNgayVe" class="text-danger"></span>
             </div>
             <div class="form-group">
